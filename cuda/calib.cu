@@ -9,6 +9,7 @@
 
 // File format: int32 ndim, int32 dims, then raw float32.
 static std::vector<float> read_tensor(const char* path) {
+    // Read activations from file
     std::FILE* f = std::fopen(path, "rb");
     if (!f) { std::perror(path); std::exit(1); }
     int32_t ndim = 0, dim = 0;
@@ -33,7 +34,7 @@ static double now() {
 }
 
 #define NBINS 2048
-#define LEVELS 128
+#define LEVELS 128 // Using int8 quantization
 #define NCANDIDATES 1921 // i = 128 .. 2048
 
 // Order for one layer:
