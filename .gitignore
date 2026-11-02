@@ -1,0 +1,7 @@
+build/
+cmake-build-*/
+data/
+checkpoints/
+results/csv/
+__pycache__/
+*.exe
