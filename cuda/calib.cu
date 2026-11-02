@@ -153,11 +153,14 @@ int main(int argc, char** argv) {
                 prop.multiProcessorCount, prop.sharedMemPerBlock / 1024,
                 prop.sharedMemPerBlockOptin / 1024);
 
+    // Read activations data from file
     const std::vector<float> act = read_tensor(argv[1]);
     const size_t n = act.size();
 
+    // Init cuda memory of tensor size
     float* d_act = nullptr;
     cudaMalloc(&d_act, n * sizeof(float));
+    // Copy tensor to gpu
     cudaMemcpy(d_act, act.data(), n * sizeof(float), cudaMemcpyHostToDevice);
 
     // One thread on the CPU: the answer to check against, and T(1) for speedup.
@@ -167,7 +170,9 @@ int main(int argc, char** argv) {
     std::printf("%zu values, CPU max %f in %.6f s\n", n, cpu_max, now() - start);
 
     start = now();
-    // Launch your kernel here, then:
+    // Launch kernels
+    // First find max value per tensor
+
     cudaDeviceSynchronize();
     std::printf("GPU %.6f s\n", now() - start);
 
