@@ -5,6 +5,7 @@
 #include <cmath>
 #include <cstdint>
 #include <cstdio>
+#include <cstring>
 #include <vector>
 
 // File format: int32 ndim, int32 dims, then raw float32.
@@ -145,7 +146,8 @@ __global__ void percentile_kernel(const unsigned* d_hist, unsigned total,
 __global__ void argmin_kernel(const float* d_score, int count, int* d_best) {}
 
 int main(int argc, char** argv) {
-    if (argc < 2) { std::fprintf(stderr, "usage: calib FILE\n"); return 2; }
+    if (argc < 2) { std::fprintf(stderr, "usage: calib FILE [--pageable]\n"); return 2; }
+    const bool pinned = !(argc > 2 && std::strcmp(argv[2], "--pageable") == 0);
 
     cudaDeviceProp prop;
     cudaGetDeviceProperties(&prop, 0);
@@ -154,17 +156,32 @@ int main(int argc, char** argv) {
                 prop.sharedMemPerBlockOptin / 1024);
 
     // Read activations data from file
-    const std::vector<float> act = read_tensor(argv[1]);
+    std::vector<float> act = read_tensor(argv[1]);
     const size_t n = act.size();
+    const size_t bytes = n * sizeof(float);
 
-    // Init cuda memory of tensor size
+    // Init cuda memory of tensor size. This also creates the CUDA context, so its
+    // start-up cost stays out of the pin and copy times below.
     float* d_act = nullptr;
-    cudaMalloc(&d_act, n * sizeof(float));
-    // Copy tensor to gpu
-    cudaMemcpy(d_act, act.data(), n * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMalloc(&d_act, bytes);
+
+    // Pin act in place so the GPU copies straight from it. Pinning costs time once;
+    // compare pin + copy against a --pageable run to see whether it pays off.
+    double start = now();
+    if (pinned) cudaHostRegister(act.data(), bytes, cudaHostRegisterDefault);
+    const double pin_time = now() - start;
+
+    // Copy tensor to gpu. A pageable copy can return before it finishes, so wait.
+    start = now();
+    cudaMemcpy(d_act, act.data(), bytes, cudaMemcpyHostToDevice);
+    cudaDeviceSynchronize();
+    const double copy_time = now() - start;
+    std::printf("upload %.1f MB %s: pin %.6f s, copy %.6f s (%.1f GB/s)\n", bytes / 1e6,
+                pinned ? "pinned" : "pageable", pin_time, copy_time,
+                bytes / copy_time / 1e9);
 
     // One thread on the CPU: the answer to check against, and T(1) for speedup.
-    double start = now();
+    start = now();
     float cpu_max = 0.f;
     for (size_t i = 0; i < n; ++i) cpu_max = std::fmax(cpu_max, std::fabs(act[i]));
     std::printf("%zu values, CPU max %f in %.6f s\n", n, cpu_max, now() - start);
@@ -177,5 +194,6 @@ int main(int argc, char** argv) {
     std::printf("GPU %.6f s\n", now() - start);
 
     cudaFree(d_act);
+    if (pinned) cudaHostUnregister(act.data());
     return 0;
 }
