@@ -1,8 +1,8 @@
 """Everything that isn't CUDA: get a pretrained ResNet-20 and dump its data.
 
-  pip install torch torchvision
-  python3 prepare.py                                 # export to ~/ptq
-  python3 prepare.py --eval ~/ptq/thresholds.txt     # accuracy with INT8 inputs
+  pip install -r requirements.txt
+  python3 prepare.py                                 # export to data/ (gitignored)
+  python3 prepare.py --eval data/thresholds.txt      # accuracy with INT8 inputs
 
 Binary files: int32 ndim, int32 dims, then raw float32.
 thresholds.txt: one T per line per layer, 0 to leave that layer unquantized.
@@ -105,7 +105,7 @@ def accuracy(model, data, device):
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--dir", default="~/ptq")
+parser.add_argument("--dir", default=str(Path(__file__).resolve().parent / "data"))
 parser.add_argument("--images", type=int, default=512)
 parser.add_argument("--eval", help="thresholds.txt to evaluate instead of exporting")
 args = parser.parse_args()

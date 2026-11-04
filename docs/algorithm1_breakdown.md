@@ -323,14 +323,14 @@ Each step mirrors a CUDA kernel. The CUDA name is in brackets.
 
 - **Why:** every method chooses T from the full histogram.
 - **Steps:**
-  1. `uint64_t hist[2048] = {0}`.
+  1. `unsigned hist[2048] = {0}`.
   2. Loop over my values: `++hist[min(int(|x| * inv_w), 2047)]`.
-  3. `MPI_Allreduce(hist, ghist, 2048, MPI_UINT64_T, MPI_SUM, MPI_COMM_WORLD)`.
-- **Communication:** 2,048 uint64 = 16 KB, the largest message, log p rounds or a
+  3. `MPI_Allreduce(hist, ghist, 2048, MPI_UNSIGNED, MPI_SUM, MPI_COMM_WORLD)`.
+- **Communication:** 2,048 uint32 = 8 KB, the largest message, log p rounds or a
   ring for long messages.
-- **Why uint64:** it is the plan's choice for headroom. uint32 would also fit here,
-  since the largest layer has 67 million values at 4,096 images, well under the
-  4.3 billion limit. Switching to uint32 halves the message to 8 KB.
+- **Why uint32:** the largest layer has 67 million values at 4,096 images, well
+  under the 4.3 billion limit, and it matches P1's histogram. uint64 would double
+  the message to 16 KB for headroom this project doesn't need.
 - **Contention:** none. Each rank writes only its own private array. This is the
   distributed-memory counterpart of the GPU's private block histograms.
 
@@ -378,7 +378,7 @@ can compute T. Rank 0 prints or writes them.
 | Step | Call | Message | Rounds |
 |---|---|---|---|
 | Global max | `MPI_Allreduce`, `MPI_MAX` | 1 float | log p |
-| Global histogram | `MPI_Allreduce`, `MPI_SUM` | 2,048 uint64, 16 KB | log p, or a ring |
+| Global histogram | `MPI_Allreduce`, `MPI_SUM` | 2,048 uint32, 8 KB | log p, or a ring |
 | Winners | `MPI_Allreduce`, `MPI_MINLOC` | 2 (score, index) pairs | log p |
 
 The histogram allreduce must wait for the max allreduce, because the bin width
@@ -415,12 +415,12 @@ when the job ends.
 Computation shrinks as 1/p, and communication grows as log p:
 
 ```
-T_P2(p) ~ (2n + 2048 C) t_c / p  +  log2(p) (3 t_s + 4099 t_w)
+T_P2(p) ~ (2n + 2048 C) t_c / p  +  log2(p) (3 t_s + 2053 t_w)
 ```
 
 Here C = 1,921 candidates, t_c = time per operation, t_s = message latency and
-t_w = time per 32-bit word. The 4,099 words are 1 for the max, 4,096 for the
-histogram and 2 for a MINLOC pair.
+t_w = time per 32-bit word. The 2,053 words are 1 for the max, 2,048 for the
+histogram and 4 for the two MINLOC pairs.
 
 ### Speedup with MPI
 

@@ -1,45 +1,15 @@
-// Algorithm 1. Run: ./calib ~/ptq/layer01_act.bin
+// Algorithm 1, P1 (CUDA). Run from the project folder:
+//   ./cmake-build-release/calib data/layer01_act.bin [--radius R] [--first K] [--images N]
+//                                                     [--grid G] [--no-cpu] [--pageable]
+// --radius: smoothing, 0 = off (default). --first, --images: calibrate on images K .. K + N - 1.
+// --grid: blocks for absmax and histogram (default: fill every SM once).
+// --no-cpu: skip the one-thread version and the checks.
 #include <cuda_runtime.h>
 #include <cub/block/block_scan.cuh>
 
-#include <chrono>
-#include <cmath>
-#include <complex.h>
-#include <cstdint>
-#include <cstdio>
 #include <cstring>
-#include <vector>
 
-// File format: int32 ndim, int32 dims, then raw float32.
-static std::vector<float> read_tensor(const char* path) {
-    // Read activations from file
-    std::FILE* f = std::fopen(path, "rb");
-    if (!f) { std::perror(path); std::exit(1); }
-    int32_t ndim = 0, dim = 0;
-    size_t count = 1;
-    bool ok = std::fread(&ndim, sizeof(ndim), 1, f) == 1;
-    for (int i = 0; ok && i < ndim; ++i) {
-        ok = std::fread(&dim, sizeof(dim), 1, f) == 1;
-        count *= dim;
-    }
-    if (!ok) { std::fprintf(stderr, "bad header: %s\n", path); std::exit(1); }
-    std::vector<float> data(count);
-    if (std::fread(data.data(), sizeof(float), count, f) != count) {
-        std::fprintf(stderr, "short read: %s\n", path);
-        std::exit(1);
-    }
-    std::fclose(f);
-    return data;
-}
-
-static double now() {
-    using namespace std::chrono;
-    return duration<double>(steady_clock::now().time_since_epoch()).count();
-}
-
-#define NBINS 2048
-#define LEVELS 128 // Using int8 quantization
-#define NCANDIDATES 1921 // i = 128 .. 2048
+#include "calib_common.h" // file reading, NBINS, the one-thread version of every step
 
 // Order for one layer:
 //   absmax -> histogram -> smooth (optional) -> KL, MSE -> argmin for each
@@ -393,126 +363,23 @@ static void cuda_check(const char* what) {
     }
 }
 
-// Smoothing weights: a bell curve with sigma = radius / 2, adding up to 1. radius 0 gives {1}.
-static std::vector<float> gaussian_weights(int radius) {
-    const float sigma = static_cast<float>(radius) / 2.0f;
-    std::vector<float> weights(2 * radius + 1);
-    float weight_sum = 0.0f;
-    for (int k = -radius; k <= radius; ++k) {
-        const float weight = (radius == 0) ? 1.0f :
-            std::exp(-0.5f * (static_cast<float>(k) / sigma) * (static_cast<float>(k) / sigma));
-        weights[k + radius] = weight;
-        weight_sum += weight;
-    }
-    for (float& w : weights) w /= weight_sum; // normalize
-    return weights;
-}
-
-// CPU version: the same steps on one thread. It checks every kernel and is the
-// one-worker time for speedup.
-
-static float cpu_absmax(const std::vector<float>& x) {
-    float m = 0.0f;
-    for (const float v : x) m = std::fmax(m, std::fabs(v));
-    return m;
-}
-
-static std::vector<unsigned> cpu_histogram(const std::vector<float>& x, float bins_per_unit) {
-    std::vector<unsigned> hist(NBINS, 0);
-    for (const float v : x) {
-        int bin = static_cast<int>(std::fabs(v * bins_per_unit));
-        if (bin > NBINS - 1) bin = NBINS - 1;
-        hist[bin]++;
-    }
-    return hist;
-}
-
-static std::vector<float> cpu_smooth(const std::vector<unsigned>& hist, const std::vector<float>& weights) {
-    const int radius = static_cast<int>(weights.size() - 1) / 2;
-    std::vector<float> smooth(NBINS);
-    smooth[0] = static_cast<float>(hist[0]);
-    for (int b = 1; b < NBINS; ++b) {
-        float sum = 0.0f;
-        for (int k = -radius; k <= radius; ++k) {
-            int j = b + k;
-            if (j < 1) j = 1 - j;
-            if (j > NBINS - 1) j = 2 * NBINS - 1 - j;
-            sum += weights[k + radius] * static_cast<float>(hist[j]);
-        }
-        smooth[b] = sum;
-    }
-    return smooth;
-}
-
-static std::vector<float> cpu_mse(const std::vector<float>& smooth, float width, size_t n) {
-    std::vector<float> score(NCANDIDATES);
-    for (int cand = 0; cand < NCANDIDATES; ++cand) {
-        const float s = static_cast<float>(128 + cand) * width / 127.0f;
-        double err = 0;
-        for (int j = 0; j < NBINS; ++j) {
-            const float c = (static_cast<float>(j) + 0.5f) * width;
-            const float d = c - s * std::fmin(std::round(c / s), 127.0f);
-            err += smooth[j] * static_cast<double>(d) * d;
-        }
-        score[cand] = static_cast<float>(err / static_cast<double>(n));
-    }
-    return score;
-}
-
-// Groups come from j * 128 / i here, which checks the kernel's lo/hi bounds.
-static std::vector<float> cpu_kl(const std::vector<float>& smooth) {
-    std::vector<float> h = smooth;
-    h[0] = h[1]; // the zero fix
-    std::vector<float> score(NCANDIDATES);
-    for (int cand = 0; cand < NCANDIDATES; ++cand) {
-        const int i = 128 + cand;
-        double outliers = 0;
-        for (int j = i; j < NBINS; ++j) outliers += h[j];
-        double gsum[128] = {};
-        int gnz[128] = {};
-        for (int j = 0; j < i; ++j) {
-            gsum[j * 128 / i] += h[j];
-            gnz[j * 128 / i] += (h[j] != 0);
-        }
-        double q_total = 0;
-        for (int g = 0; g < 128; ++g) q_total += gsum[g];
-        const double total = outliers + q_total;
-        double sum = 0;
-        for (int j = 0; j < i; ++j) {
-            const double p = (h[j] + (j == i - 1 ? outliers : 0)) / total;
-            if (p == 0) continue;
-            double q = h[j] != 0 ? gsum[j * 128 / i] / gnz[j * 128 / i] / q_total : 0;
-            if (q == 0) q = 1e-4;
-            sum += p * std::log(p / q);
-        }
-        score[cand] = static_cast<float>(sum);
-    }
-    return score;
-}
-
-// Lowest score, first one on a tie.
-static int cpu_argmin(const std::vector<float>& score) {
-    int best = 0;
-    for (int c = 1; c < static_cast<int>(score.size()); ++c) if (score[c] < score[best]) best = c;
-    return best;
-}
-
-// Walk the running total until it reaches each target.
-static std::vector<int> cpu_percentile(const std::vector<unsigned>& hist, size_t n, const std::vector<double>& qs) {
-    std::vector<int> bins;
-    for (const double q : qs) {
-        const double target = q * static_cast<double>(n);
-        int b = 0;
-        unsigned long long cum = hist[0];
-        while (cum < target) cum += hist[++b];
-        bins.push_back(b);
-    }
-    return bins;
-}
-
 int main(int argc, char** argv) {
-    if (argc < 2) { std::fprintf(stderr, "usage: calib FILE [--pageable]\n"); return 2; }
-    const bool pinned = !(argc > 2 && std::strcmp(argv[2], "--pageable") == 0);
+    const char* usage = "usage: calib FILE [--radius R] [--first K] [--images N] [--grid G] [--no-cpu] [--pageable]\n";
+    if (argc < 2) { std::fprintf(stderr, "%s", usage); return 2; }
+    bool pinned = true;
+    bool run_cpu = true;              // the one-thread version: T(1) and the checks
+    int radius = 0;                   // smoothing, 0 = off
+    int grid = 0;                     // blocks for absmax and histogram, 0 = fill every SM once
+    size_t first = 0, images = 0;     // images = 0: every image from first on
+    for (int a = 2; a < argc; ++a) {
+        if (std::strcmp(argv[a], "--pageable") == 0) pinned = false;
+        else if (std::strcmp(argv[a], "--no-cpu") == 0) run_cpu = false;
+        else if (std::strcmp(argv[a], "--grid") == 0 && a + 1 < argc) grid = std::atoi(argv[++a]);
+        else if (std::strcmp(argv[a], "--radius") == 0 && a + 1 < argc) radius = std::atoi(argv[++a]);
+        else if (std::strcmp(argv[a], "--first") == 0 && a + 1 < argc) first = std::strtoull(argv[++a], nullptr, 10);
+        else if (std::strcmp(argv[a], "--images") == 0 && a + 1 < argc) images = std::strtoull(argv[++a], nullptr, 10);
+        else { std::fprintf(stderr, "%s", usage); return 2; }
+    }
 
     cudaDeviceProp prop{};
     cudaGetDeviceProperties(&prop, 0);
@@ -521,18 +388,22 @@ int main(int argc, char** argv) {
                 prop.sharedMemPerBlockOptin / 1024);
 
     // Read activations tensors from file
-    std::vector<float> act = read_tensor(argv[1]);
+    size_t file_images = 0;
+    std::vector<float> act = read_tensor(argv[1], first, images, file_images);
     const size_t n = act.size();
     const size_t bytes = n * sizeof(float);
+    const size_t used = images ? images : file_images - first;
+    std::printf("%s: images %zu .. %zu of %zu, %zu values, smoothing radius %d\n", argv[1], first,
+                first + used - 1, file_images, n, radius);
 
     // Settings
-    const int grid = prop.multiProcessorCount * (prop.maxThreadsPerMultiProcessor / 256); // fills every SM once, 660 here
-    constexpr int radius = 2; // smoothing, 0 = off
+    if (grid <= 0) grid = prop.multiProcessorCount * (prop.maxThreadsPerMultiProcessor / 256); // fills every SM once, 660 here
+    std::printf("grid %d blocks of 256 for absmax and histogram\n", grid);
     const std::vector<float> weights = gaussian_weights(radius);
-    const std::vector<double> qs = {0.999, 0.9999, 0.99999, 0.999999};
+    const std::vector<double>& qs = PERCENTILES;
     const int nq = static_cast<int>(qs.size());
     constexpr int GPU_RUNS = 10; // timed runs, after one warm-up run
-    constexpr int CPU_RUNS = 3;
+    const int CPU_RUNS = run_cpu ? 3 : 0;
 
     // init GPU memory is made before timing
     float* d_tensor = nullptr;
@@ -587,8 +458,8 @@ int main(int argc, char** argv) {
     // GPU pipeline. Events are timestamps the GPU records itself, so ev[s] to ev[s + 1]
     // is the GPU time of step s with no CPU overhead mixed in.
     constexpr int NSTEPS = 8;
-    const char* step_names[NSTEPS] = {"absmax", "histogram", "smooth", "mse", "argmin mse",
-                                      "kl", "argmin kl", "percentile"};
+    const char* step_names[NSTEPS] = {"absmax", "histogram", "smooth", "mse", "argmin_mse",
+                                      "kl", "argmin_kl", "percentile"};
     cudaEvent_t ev[NSTEPS + 1];
     for (cudaEvent_t& e : ev) cudaEventCreate(&e);
     double gpu_ms[NSTEPS] = {};
@@ -667,26 +538,17 @@ int main(int argc, char** argv) {
         }
     }
 
-    // CPU pipeline, timed per step with the host clock. Each step uses the CPU's own
-    // results, so this is the whole algorithm on one thread.
-    double cpu_ms[NSTEPS] = {};
-    float cpu_max = 0.0f;
-    std::vector<unsigned> cpu_hist;
-    std::vector<float> cpu_sm, cpu_mse_score, cpu_kl_score;
-    int cpu_best_mse = 0, cpu_best_kl = 0;
-    std::vector<int> cpu_pbins;
-    for (int run = 0; run < CPU_RUNS; ++run) {
-        double t = now();
-        auto lap = [&](int s) { const double t2 = now(); cpu_ms[s] += (t2 - t) * 1e3 / CPU_RUNS; t = t2; };
-        cpu_max = cpu_absmax(act);                                     lap(0);
-        cpu_hist = cpu_histogram(act, NBINS / cpu_max);                lap(1);
-        cpu_sm = cpu_smooth(cpu_hist, weights);                        lap(2);
-        cpu_mse_score = cpu_mse(cpu_sm, cpu_max / NBINS, n);           lap(3);
-        cpu_best_mse = cpu_argmin(cpu_mse_score);                      lap(4);
-        cpu_kl_score = cpu_kl(cpu_sm);                                 lap(5);
-        cpu_best_kl = cpu_argmin(cpu_kl_score);                        lap(6);
-        cpu_pbins = cpu_percentile(cpu_hist, n, qs);                   lap(7);
-    }
+    // CPU pipeline: the whole algorithm on one thread, timed per step. It lives in
+    // common/calib_cpu.cpp so the host compiler builds it exactly as it builds P2.
+    const CpuResult cpu = run_cpu ? cpu_pipeline(act.data(), n, weights, qs, CPU_RUNS) : CpuResult{};
+    const double* cpu_ms = cpu.ms;
+    const float cpu_max = cpu.max;
+    const std::vector<unsigned>& cpu_hist = cpu.hist;
+    const std::vector<float>& cpu_sm = cpu.smooth;
+    const std::vector<float>& cpu_mse_score = cpu.mse;
+    const std::vector<float>& cpu_kl_score = cpu.kl;
+    const int cpu_best_mse = cpu.best_mse, cpu_best_kl = cpu.best_kl;
+    const std::vector<int>& cpu_pbins = cpu.pbins;
 
     // Copy the GPU results back
     std::vector<unsigned> hist(NBINS), hist_global(NBINS), hist_plain(NBINS);
@@ -713,31 +575,37 @@ int main(int argc, char** argv) {
         }
         return wrong;
     };
-    std::printf("\nchecks against the CPU:\n");
-    std::printf("  max: GPU %f, CPU %f\n", maxVal, cpu_max);
-    std::printf("  histogram: %d / %d / %d buckets differ (global / shared / zero trick)\n",
-                count_differ(hist_global, cpu_hist, 0, 0), count_differ(hist_plain, cpu_hist, 0, 0),
-                count_differ(hist, cpu_hist, 0, 0));
-    std::printf("  smooth: %d buckets differ\n", count_differ(smooth, cpu_sm, 1e-3, 1e-3));
-    std::printf("  mse: %d candidates differ\n", count_differ(mse, cpu_mse_score, 1e-3, 0));
-    std::printf("  kl: %d candidates differ\n", count_differ(kl, cpu_kl_score, 1e-3, 1e-5));
-    // argmin is checked on the GPU's own scores, since near-ties can rank differently on the CPU's
-    std::printf("  argmin: MSE bucket %d (expected %d), KL bucket %d (expected %d)\n",
-                128 + best[0], 128 + cpu_argmin(mse), 128 + best[1], 128 + cpu_argmin(kl));
-    std::printf("  percentile: %d of %d buckets differ\n", count_differ(pbins, cpu_pbins, 0, 0), nq);
+    if (run_cpu) {
+        std::printf("\nchecks against the CPU:\n");
+        std::printf("  max: GPU %f, CPU %f\n", maxVal, cpu_max);
+        std::printf("  histogram: %d / %d / %d buckets differ (global / shared / zero trick)\n",
+                    count_differ(hist_global, cpu_hist, 0, 0), count_differ(hist_plain, cpu_hist, 0, 0),
+                    count_differ(hist, cpu_hist, 0, 0));
+        std::printf("  smooth: %d buckets differ\n", count_differ(smooth, cpu_sm, 1e-3, 1e-3));
+        std::printf("  mse: %d candidates differ\n", count_differ(mse, cpu_mse_score, 1e-3, 0));
+        std::printf("  kl: %d candidates differ\n", count_differ(kl, cpu_kl_score, 1e-3, 1e-5));
+        // argmin is checked on the GPU's own scores, since near-ties can rank differently on the CPU's
+        std::printf("  argmin: MSE bucket %d (expected %d), KL bucket %d (expected %d)\n",
+                    128 + best[0], 128 + cpu_argmin(mse), 128 + best[1], 128 + cpu_argmin(kl));
+        std::printf("  percentile: %d of %d buckets differ\n", count_differ(pbins, cpu_pbins, 0, 0), nq);
+    }
 
     std::printf("\ncutoffs:\n");
     std::printf("  max: T = %f\n", maxVal);
-    std::printf("  MSE: bucket %d, T = %f (CPU scores: bucket %d)\n",
-                128 + best[0], static_cast<float>(128 + best[0]) * width, 128 + cpu_best_mse);
-    std::printf("  KL: bucket %d, T = %f (CPU scores: bucket %d)\n",
-                128 + best[1], (static_cast<float>(128 + best[1]) + 0.5f) * width, 128 + cpu_best_kl);
+    std::printf("  MSE: bucket %d, T = %f\n", 128 + best[0], static_cast<float>(128 + best[0]) * width);
+    std::printf("  KL: bucket %d, T = %f\n", 128 + best[1], (static_cast<float>(128 + best[1]) + 0.5f) * width);
+    if (run_cpu)
+        std::printf("  CPU scores pick: MSE bucket %d, KL bucket %d\n", 128 + cpu_best_mse, 128 + cpu_best_kl);
     for (int k = 0; k < nq; ++k)
         std::printf("  percentile %.4f%%: bucket %d, T = %f\n", qs[k] * 100, pbins[k],
                     static_cast<float>(pbins[k] + 1) * width);
+    print_result(radius, first, used, maxVal, width, 128 + best[0], 128 + best[1], pbins);
 
-    std::printf("\ntiming: GPU average of %d runs after 1 warm-up, CPU average of %d runs\n",
-                GPU_RUNS, CPU_RUNS);
+    if (run_cpu)
+        std::printf("\ntiming: GPU average of %d runs after 1 warm-up, CPU average of %d runs after 1 warm-up\n",
+                    GPU_RUNS, CPU_RUNS);
+    else
+        std::printf("\ntiming: GPU average of %d runs after 1 warm-up; CPU skipped (--no-cpu)\n", GPU_RUNS);
     std::printf("  %-12s %10s %10s %9s\n", "step", "GPU ms", "CPU ms", "speedup");
     double gpu_total = 0, cpu_total = 0;
     for (int s = 0; s < NSTEPS; ++s) {
@@ -747,8 +615,18 @@ int main(int argc, char** argv) {
         cpu_total += cpu_ms[s];
     }
     std::printf("  %-12s %10.4f %10.3f %8.1fx\n", "total", gpu_total, cpu_total, cpu_total / gpu_total);
+    // One line for scripts: GPU ms per step, then the total
+    std::printf("gpu_ms:");
+    for (int s = 0; s < NSTEPS; ++s) std::printf(" %s %.5f", step_names[s], gpu_ms[s]);
+    std::printf(" total %.5f\n", gpu_total);
+    if (run_cpu) {
+        std::printf("cpu_ms:");
+        for (int s = 0; s < NSTEPS; ++s) std::printf(" %s %.4f", step_names[s], cpu_ms[s]);
+        std::printf(" total %.4f\n", cpu_total);
+    }
     std::printf("  histogram variants (GPU ms): global atomics %.4f, shared %.4f, shared + zero trick %.4f\n",
                 variant_ms[0], variant_ms[1], variant_ms[2]);
+    std::printf("hist_ms: global %.5f shared %.5f zero_trick %.5f\n", variant_ms[0], variant_ms[1], variant_ms[2]);
 
     for (cudaEvent_t& e : ev) cudaEventDestroy(e);
     cudaFree(d_tensor);

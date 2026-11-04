@@ -1,0 +1,168 @@
+== images 512
+NVIDIA RTX PRO 5000 Blackwell: 110 SMs, shared memory 48 KB (opt-in 99 KB)
+data/layer01_act.bin: images 0 .. 511 of 4096, 8388608 values, smoothing radius 0
+grid 660 blocks of 256 for absmax and histogram
+L2 cache 96 MB
+upload 33.6 MB pinned: pin 0.001907 s, copy 0.000670 s (50.1 GB/s)
+
+checks against the CPU:
+  max: GPU 6.379721, CPU 6.379721
+  histogram: 0 / 0 / 0 buckets differ (global / shared / zero trick)
+  smooth: 0 buckets differ
+  mse: 0 candidates differ
+  kl: 0 candidates differ
+  argmin: MSE bucket 1648 (expected 1648), KL bucket 1683 (expected 1683)
+  percentile: 0 of 4 buckets differ
+
+cutoffs:
+  max: T = 6.379721
+  MSE: bucket 1648, T = 5.133682
+  KL: bucket 1683, T = 5.244268
+  CPU scores pick: MSE bucket 1648, KL bucket 1683
+  percentile 99.9000%: bucket 1091, T = 3.401687
+  percentile 99.9900%: bucket 1566, T = 4.881359
+  percentile 99.9990%: bucket 1820, T = 5.672594
+  percentile 99.9999%: bucket 1969, T = 6.136744
+result: radius 0 first 0 images 512 max 6.379721 mse 5.133682 kl 5.244268 p99.9 3.401687 p99.99 4.881359 p99.999 5.672594 p99.9999 6.136744
+
+timing: GPU average of 10 runs after 1 warm-up, CPU average of 3 runs
+  step             GPU ms     CPU ms   speedup
+  absmax           0.0515      7.185    139.6x
+  histogram        0.0242      7.658    316.6x
+  smooth           0.0037      0.003      0.8x
+  mse              0.0082     14.053   1724.2x
+  argmin_mse       0.0041      0.002      0.4x
+  kl               0.0184     23.802   1291.3x
+  argmin_kl        0.0041      0.002      0.4x
+  percentile       0.0123      0.003      0.3x
+  total            0.1264     52.708    417.0x
+gpu_ms: absmax 0.05148 histogram 0.02419 smooth 0.00367 mse 0.00815 argmin_mse 0.00410 kl 0.01843 argmin_kl 0.00410 percentile 0.01229 total 0.12639
+cpu_ms: absmax 7.1855 histogram 7.6581 smooth 0.0031 mse 14.0528 argmin_mse 0.0016 kl 23.8021 argmin_kl 0.0017 percentile 0.0035 total 52.7084
+  histogram variants (GPU ms): global atomics 1.6113, shared 0.0444, shared + zero trick 0.0485
+hist_ms: global 1.61133 shared 0.04444 zero_trick 0.04853
+== images 1024
+NVIDIA RTX PRO 5000 Blackwell: 110 SMs, shared memory 48 KB (opt-in 99 KB)
+data/layer01_act.bin: images 0 .. 1023 of 4096, 16777216 values, smoothing radius 0
+grid 660 blocks of 256 for absmax and histogram
+L2 cache 96 MB
+upload 67.1 MB pinned: pin 0.003825 s, copy 0.001282 s (52.4 GB/s)
+
+checks against the CPU:
+  max: GPU 6.379721, CPU 6.379721
+  histogram: 0 / 0 / 0 buckets differ (global / shared / zero trick)
+  smooth: 0 buckets differ
+  mse: 0 candidates differ
+  kl: 0 candidates differ
+  argmin: MSE bucket 1619 (expected 1619), KL bucket 1683 (expected 1683)
+  percentile: 0 of 4 buckets differ
+
+cutoffs:
+  max: T = 6.379721
+  MSE: bucket 1619, T = 5.043344
+  KL: bucket 1683, T = 5.244268
+  CPU scores pick: MSE bucket 1619, KL bucket 1683
+  percentile 99.9000%: bucket 1050, T = 3.273968
+  percentile 99.9900%: bucket 1519, T = 4.734949
+  percentile 99.9990%: bucket 1797, T = 5.600946
+  percentile 99.9999%: bucket 1962, T = 6.114938
+result: radius 0 first 0 images 1024 max 6.379721 mse 5.043344 kl 5.244268 p99.9 3.273968 p99.99 4.734949 p99.999 5.600946 p99.9999 6.114938
+
+timing: GPU average of 10 runs after 1 warm-up, CPU average of 3 runs
+  step             GPU ms     CPU ms   speedup
+  absmax           0.0875     14.309    163.5x
+  histogram        0.0479     15.360    320.8x
+  smooth           0.0038      0.003      0.9x
+  mse              0.0083     14.721   1770.0x
+  argmin_mse       0.0041      0.002      0.4x
+  kl               0.0184     23.488   1274.3x
+  argmin_kl        0.0041      0.002      0.4x
+  percentile       0.0123      0.004      0.3x
+  total            0.1864     67.888    364.2x
+gpu_ms: absmax 0.08752 histogram 0.04788 smooth 0.00377 mse 0.00832 argmin_mse 0.00410 kl 0.01843 argmin_kl 0.00410 percentile 0.01229 total 0.18640
+cpu_ms: absmax 14.3092 histogram 15.3601 smooth 0.0034 mse 14.7208 argmin_mse 0.0018 kl 23.4877 argmin_kl 0.0017 percentile 0.0036 total 67.8883
+  histogram variants (GPU ms): global atomics 3.1862, shared 0.0844, shared + zero trick 0.0891
+hist_ms: global 3.18616 shared 0.08437 zero_trick 0.08908
+== images 2048
+NVIDIA RTX PRO 5000 Blackwell: 110 SMs, shared memory 48 KB (opt-in 99 KB)
+data/layer01_act.bin: images 0 .. 2047 of 4096, 33554432 values, smoothing radius 0
+grid 660 blocks of 256 for absmax and histogram
+L2 cache 96 MB
+upload 134.2 MB pinned: pin 0.006115 s, copy 0.002417 s (55.5 GB/s)
+
+checks against the CPU:
+  max: GPU 6.919273, CPU 6.919273
+  histogram: 0 / 0 / 0 buckets differ (global / shared / zero trick)
+  smooth: 0 buckets differ
+  mse: 0 candidates differ
+  kl: 0 candidates differ
+  argmin: MSE bucket 1578 (expected 1578), KL bucket 1854 (expected 1854)
+  percentile: 0 of 4 buckets differ
+
+cutoffs:
+  max: T = 6.919273
+  MSE: bucket 1578, T = 5.331354
+  KL: bucket 1854, T = 6.265523
+  CPU scores pick: MSE bucket 1578, KL bucket 1854
+  percentile 99.9000%: bucket 982, T = 3.321116
+  percentile 99.9900%: bucket 1436, T = 4.854978
+  percentile 99.9990%: bucket 1774, T = 5.996928
+  percentile 99.9999%: bucket 1996, T = 6.746967
+result: radius 0 first 0 images 2048 max 6.919273 mse 5.331354 kl 6.265523 p99.9 3.321116 p99.99 4.854978 p99.999 5.996928 p99.9999 6.746967
+
+timing: GPU average of 10 runs after 1 warm-up, CPU average of 3 runs
+  step             GPU ms     CPU ms   speedup
+  absmax           0.1478     28.697    194.1x
+  histogram        0.1547     31.229    201.9x
+  smooth           0.0032      0.003      1.0x
+  mse              0.0085     13.981   1654.3x
+  argmin_mse       0.0041      0.002      0.4x
+  kl               0.0184     23.848   1293.8x
+  argmin_kl        0.0041      0.002      0.4x
+  percentile       0.0123      0.004      0.3x
+  total            0.3531     97.765    276.9x
+gpu_ms: absmax 0.14785 histogram 0.15466 smooth 0.00322 mse 0.00845 argmin_mse 0.00410 kl 0.01843 argmin_kl 0.00410 percentile 0.01229 total 0.35309
+cpu_ms: absmax 28.6974 histogram 31.2289 smooth 0.0032 mse 13.9805 argmin_mse 0.0017 kl 23.8479 argmin_kl 0.0017 percentile 0.0041 total 97.7654
+  histogram variants (GPU ms): global atomics 6.4214, shared 0.1454, shared + zero trick 0.1575
+hist_ms: global 6.42144 shared 0.14541 zero_trick 0.15749
+== images 4096
+NVIDIA RTX PRO 5000 Blackwell: 110 SMs, shared memory 48 KB (opt-in 99 KB)
+data/layer01_act.bin: images 0 .. 4095 of 4096, 67108864 values, smoothing radius 0
+grid 660 blocks of 256 for absmax and histogram
+L2 cache 96 MB
+upload 268.4 MB pinned: pin 0.007510 s, copy 0.005057 s (53.1 GB/s)
+
+checks against the CPU:
+  max: GPU 7.001106, CPU 7.001106
+  histogram: 0 / 0 / 0 buckets differ (global / shared / zero trick)
+  smooth: 0 buckets differ
+  mse: 0 candidates differ
+  kl: 0 candidates differ
+  argmin: MSE bucket 1556 (expected 1556), KL bucket 1833 (expected 1833)
+  percentile: 0 of 4 buckets differ
+
+cutoffs:
+  max: T = 7.001106
+  MSE: bucket 1556, T = 5.319200
+  KL: bucket 1833, T = 6.267836
+  CPU scores pick: MSE bucket 1556, KL bucket 1833
+  percentile 99.9000%: bucket 963, T = 3.295443
+  percentile 99.9900%: bucket 1411, T = 4.826935
+  percentile 99.9990%: bucket 1751, T = 5.989228
+  percentile 99.9999%: bucket 1972, T = 6.744718
+result: radius 0 first 0 images 4096 max 7.001106 mse 5.319200 kl 6.267836 p99.9 3.295443 p99.99 4.826935 p99.999 5.989228 p99.9999 6.744718
+
+timing: GPU average of 10 runs after 1 warm-up, CPU average of 3 runs
+  step             GPU ms     CPU ms   speedup
+  absmax           0.2917     58.441    200.3x
+  histogram        0.2510     62.726    249.9x
+  smooth           0.0034      0.003      1.0x
+  mse              0.0088     13.478   1525.4x
+  argmin_mse       0.0041      0.002      0.4x
+  kl               0.0184     23.429   1271.1x
+  argmin_kl        0.0041      0.002      0.4x
+  percentile       0.0123      0.003      0.3x
+  total            0.5939    158.083    266.2x
+gpu_ms: absmax 0.29170 histogram 0.25105 smooth 0.00339 mse 0.00884 argmin_mse 0.00410 kl 0.01843 argmin_kl 0.00410 percentile 0.01229 total 0.59388
+cpu_ms: absmax 58.4407 histogram 62.7262 smooth 0.0033 mse 13.4777 argmin_mse 0.0017 kl 23.4287 argmin_kl 0.0017 percentile 0.0033 total 158.0831
+  histogram variants (GPU ms): global atomics 12.8241, shared 0.2867, shared + zero trick 0.2992
+hist_ms: global 12.82410 shared 0.28672 zero_trick 0.29921

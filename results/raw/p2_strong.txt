@@ -1,0 +1,1000 @@
+== layer 01 images 512 p 1
+data/layer01_act.bin: 1 ranks, images 0 .. 511 of 4096, 8388608 values (512 to 512 images per rank), smoothing radius 0
+check: histogram counts 8388608 of 8388608 values
+
+cutoffs:
+  max: T = 6.379721
+  MSE: bucket 1648, T = 5.133682
+  KL: bucket 1683, T = 5.244268
+  percentile 99.9000%: bucket 1091, T = 3.401687
+  percentile 99.9900%: bucket 1566, T = 4.881359
+  percentile 99.9990%: bucket 1820, T = 5.672594
+  percentile 99.9999%: bucket 1969, T = 6.136744
+result: radius 0 first 0 images 512 max 6.379721 mse 5.133682 kl 5.244268 p99.9 3.401687 p99.99 4.881359 p99.999 5.672594 p99.9999 6.136744
+
+timing: average of 5 runs after 1 warm-up; read 18.967 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        7.3647      7.3647
+  max allreduce      comm        0.0004      0.0004
+  local histogram    comp        7.6514      7.6514
+  hist allreduce     comm        0.0007      0.0007
+  smooth+percentile  comp        0.0078      0.0078
+  search             comp       39.4620     39.4620
+  minloc allreduce   comm        0.0003      0.0003
+  computation 54.4860 ms, communication 0.0013 ms, total 54.4873 ms
+mpi_ms: p 1 local_max 7.36471 max_allreduce 0.00038 local_histogram 7.65141 hist_allreduce 0.00065 smooth_percentile 0.00784 search 39.46202 minloc_allreduce 0.00028 search_fastest 39.46202 comp 54.48598 comm 0.00131 total 54.48729
+== layer 01 images 512 p 2
+data/layer01_act.bin: 2 ranks, images 0 .. 511 of 4096, 8388608 values (256 to 256 images per rank), smoothing radius 0
+check: histogram counts 8388608 of 8388608 values
+
+cutoffs:
+  max: T = 6.379721
+  MSE: bucket 1648, T = 5.133682
+  KL: bucket 1683, T = 5.244268
+  percentile 99.9000%: bucket 1091, T = 3.401687
+  percentile 99.9900%: bucket 1566, T = 4.881359
+  percentile 99.9990%: bucket 1820, T = 5.672594
+  percentile 99.9999%: bucket 1969, T = 6.136744
+result: radius 0 first 0 images 512 max 6.379721 mse 5.133682 kl 5.244268 p99.9 3.401687 p99.99 4.881359 p99.999 5.672594 p99.9999 6.136744
+
+timing: average of 5 runs after 1 warm-up; read 10.295 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        3.7130      3.6456
+  max allreduce      comm        0.0012      0.0010
+  local histogram    comp        3.8170      3.6984
+  hist allreduce     comm        0.0113      0.0103
+  smooth+percentile  comp        0.0093      0.0077
+  search             comp       19.9781     19.5693
+  minloc allreduce   comm        0.0024      0.0006
+  computation 27.5175 ms, communication 0.0150 ms, total 27.5324 ms
+mpi_ms: p 2 local_max 3.71298 max_allreduce 0.00121 local_histogram 3.81705 hist_allreduce 0.01132 smooth_percentile 0.00928 search 19.97815 minloc_allreduce 0.00243 search_fastest 19.56935 comp 27.51745 comm 0.01496 total 27.53241
+== layer 01 images 512 p 4
+data/layer01_act.bin: 4 ranks, images 0 .. 511 of 4096, 8388608 values (128 to 128 images per rank), smoothing radius 0
+check: histogram counts 8388608 of 8388608 values
+
+cutoffs:
+  max: T = 6.379721
+  MSE: bucket 1648, T = 5.133682
+  KL: bucket 1683, T = 5.244268
+  percentile 99.9000%: bucket 1091, T = 3.401687
+  percentile 99.9900%: bucket 1566, T = 4.881359
+  percentile 99.9990%: bucket 1820, T = 5.672594
+  percentile 99.9999%: bucket 1969, T = 6.136744
+result: radius 0 first 0 images 512 max 6.379721 mse 5.133682 kl 5.244268 p99.9 3.401687 p99.99 4.881359 p99.999 5.672594 p99.9999 6.136744
+
+timing: average of 5 runs after 1 warm-up; read 5.861 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        1.9414      1.9243
+  max allreduce      comm        0.0043      0.0019
+  local histogram    comp        2.0221      1.9705
+  hist allreduce     comm        0.0192      0.0177
+  smooth+percentile  comp        0.0088      0.0072
+  search             comp       10.5444     10.4645
+  minloc allreduce   comm        0.0024      0.0010
+  computation 14.5167 ms, communication 0.0259 ms, total 14.5426 ms
+mpi_ms: p 4 local_max 1.94141 max_allreduce 0.00431 local_histogram 2.02206 hist_allreduce 0.01923 smooth_percentile 0.00881 search 10.54437 minloc_allreduce 0.00237 search_fastest 10.46447 comp 14.51666 comm 0.02592 total 14.54257
+== layer 01 images 512 p 8
+data/layer01_act.bin: 8 ranks, images 0 .. 511 of 4096, 8388608 values (64 to 64 images per rank), smoothing radius 0
+check: histogram counts 8388608 of 8388608 values
+
+cutoffs:
+  max: T = 6.379721
+  MSE: bucket 1648, T = 5.133682
+  KL: bucket 1683, T = 5.244268
+  percentile 99.9000%: bucket 1091, T = 3.401687
+  percentile 99.9900%: bucket 1566, T = 4.881359
+  percentile 99.9990%: bucket 1820, T = 5.672594
+  percentile 99.9999%: bucket 1969, T = 6.136744
+result: radius 0 first 0 images 512 max 6.379721 mse 5.133682 kl 5.244268 p99.9 3.401687 p99.99 4.881359 p99.999 5.672594 p99.9999 6.136744
+
+timing: average of 5 runs after 1 warm-up; read 4.188 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.9824      0.9799
+  max allreduce      comm        0.0019      0.0012
+  local histogram    comp        1.1963      0.9808
+  hist allreduce     comm        0.0175      0.0153
+  smooth+percentile  comp        0.0101      0.0072
+  search             comp        5.3994      5.3538
+  minloc allreduce   comm        0.0022      0.0011
+  computation 7.5882 ms, communication 0.0216 ms, total 7.6098 ms
+mpi_ms: p 8 local_max 0.98242 max_allreduce 0.00191 local_histogram 1.19626 hist_allreduce 0.01751 smooth_percentile 0.01009 search 5.39939 minloc_allreduce 0.00218 search_fastest 5.35380 comp 7.58816 comm 0.02160 total 7.60977
+== layer 01 images 512 p 16
+data/layer01_act.bin: 16 ranks, images 0 .. 511 of 4096, 8388608 values (32 to 32 images per rank), smoothing radius 0
+check: histogram counts 8388608 of 8388608 values
+
+cutoffs:
+  max: T = 6.379721
+  MSE: bucket 1648, T = 5.133682
+  KL: bucket 1683, T = 5.244268
+  percentile 99.9000%: bucket 1091, T = 3.401687
+  percentile 99.9900%: bucket 1566, T = 4.881359
+  percentile 99.9990%: bucket 1820, T = 5.672594
+  percentile 99.9999%: bucket 1969, T = 6.136744
+result: radius 0 first 0 images 512 max 6.379721 mse 5.133682 kl 5.244268 p99.9 3.401687 p99.99 4.881359 p99.999 5.672594 p99.9999 6.136744
+
+timing: average of 5 runs after 1 warm-up; read 3.498 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.5117      0.5022
+  max allreduce      comm        0.0026      0.0012
+  local histogram    comp        0.5358      0.5027
+  hist allreduce     comm        0.0183      0.0154
+  smooth+percentile  comp        0.0094      0.0071
+  search             comp        2.8653      2.7312
+  minloc allreduce   comm        0.0033      0.0013
+  computation 3.9222 ms, communication 0.0242 ms, total 3.9464 ms
+mpi_ms: p 16 local_max 0.51171 max_allreduce 0.00258 local_histogram 0.53578 hist_allreduce 0.01832 smooth_percentile 0.00941 search 2.86531 minloc_allreduce 0.00326 search_fastest 2.73122 comp 3.92220 comm 0.02416 total 3.94636
+== layer 01 images 512 p 22
+data/layer01_act.bin: 22 ranks, images 0 .. 511 of 4096, 8388608 values (23 to 24 images per rank), smoothing radius 0
+check: histogram counts 8388608 of 8388608 values
+
+cutoffs:
+  max: T = 6.379721
+  MSE: bucket 1648, T = 5.133682
+  KL: bucket 1683, T = 5.244268
+  percentile 99.9000%: bucket 1091, T = 3.401687
+  percentile 99.9900%: bucket 1566, T = 4.881359
+  percentile 99.9990%: bucket 1820, T = 5.672594
+  percentile 99.9999%: bucket 1969, T = 6.136744
+result: radius 0 first 0 images 512 max 6.379721 mse 5.133682 kl 5.244268 p99.9 3.401687 p99.99 4.881359 p99.999 5.672594 p99.9999 6.136744
+
+timing: average of 5 runs after 1 warm-up; read 9.546 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.4027      0.3785
+  max allreduce      comm        0.0051      0.0025
+  local histogram    comp        0.4077      0.3796
+  hist allreduce     comm        0.0314      0.0256
+  smooth+percentile  comp        0.0084      0.0073
+  search             comp        2.1690      2.0798
+  minloc allreduce   comm        0.0066      0.0031
+  computation 2.9878 ms, communication 0.0431 ms, total 3.0309 ms
+mpi_ms: p 22 local_max 0.40271 max_allreduce 0.00514 local_histogram 0.40765 hist_allreduce 0.03136 smooth_percentile 0.00837 search 2.16902 minloc_allreduce 0.00661 search_fastest 2.07982 comp 2.98775 comm 0.04311 total 3.03086
+== layer 01 images 512 p 32
+data/layer01_act.bin: 32 ranks, images 0 .. 511 of 4096, 8388608 values (16 to 16 images per rank), smoothing radius 0
+check: histogram counts 8388608 of 8388608 values
+
+cutoffs:
+  max: T = 6.379721
+  MSE: bucket 1648, T = 5.133682
+  KL: bucket 1683, T = 5.244268
+  percentile 99.9000%: bucket 1091, T = 3.401687
+  percentile 99.9900%: bucket 1566, T = 4.881359
+  percentile 99.9990%: bucket 1820, T = 5.672594
+  percentile 99.9999%: bucket 1969, T = 6.136744
+result: radius 0 first 0 images 512 max 6.379721 mse 5.133682 kl 5.244268 p99.9 3.401687 p99.99 4.881359 p99.999 5.672594 p99.9999 6.136744
+
+timing: average of 5 runs after 1 warm-up; read 5.165 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.3001      0.2583
+  max allreduce      comm        0.0034      0.0020
+  local histogram    comp        0.5310      0.3887
+  hist allreduce     comm        0.0222      0.0175
+  smooth+percentile  comp        0.0162      0.0137
+  search             comp        2.1864      2.1052
+  minloc allreduce   comm        0.0095      0.0018
+  computation 3.0338 ms, communication 0.0352 ms, total 3.0690 ms
+mpi_ms: p 32 local_max 0.30011 max_allreduce 0.00344 local_histogram 0.53105 hist_allreduce 0.02219 smooth_percentile 0.01621 search 2.18642 minloc_allreduce 0.00953 search_fastest 2.10522 comp 3.03379 comm 0.03516 total 3.06895
+== layer 01 images 512 p 44
+data/layer01_act.bin: 44 ranks, images 0 .. 511 of 4096, 8388608 values (11 to 12 images per rank), smoothing radius 0
+check: histogram counts 8388608 of 8388608 values
+
+cutoffs:
+  max: T = 6.379721
+  MSE: bucket 1648, T = 5.133682
+  KL: bucket 1683, T = 5.244268
+  percentile 99.9000%: bucket 1091, T = 3.401687
+  percentile 99.9900%: bucket 1566, T = 4.881359
+  percentile 99.9990%: bucket 1820, T = 5.672594
+  percentile 99.9999%: bucket 1969, T = 6.136744
+result: radius 0 first 0 images 512 max 6.379721 mse 5.133682 kl 5.244268 p99.9 3.401687 p99.99 4.881359 p99.999 5.672594 p99.9999 6.136744
+
+timing: average of 5 runs after 1 warm-up; read 6.565 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.2043      0.1811
+  max allreduce      comm        0.0092      0.0032
+  local histogram    comp        0.4176      0.2694
+  hist allreduce     comm        0.0626      0.0562
+  smooth+percentile  comp        0.0152      0.0141
+  search             comp        1.6990      1.5542
+  minloc allreduce   comm        0.0157      0.0029
+  computation 2.3360 ms, communication 0.0875 ms, total 2.4235 ms
+mpi_ms: p 44 local_max 0.20427 max_allreduce 0.00920 local_histogram 0.41761 hist_allreduce 0.06255 smooth_percentile 0.01516 search 1.69898 minloc_allreduce 0.01573 search_fastest 1.55425 comp 2.33602 comm 0.08748 total 2.42350
+== layer 08 images 512 p 1
+data/layer08_act.bin: 1 ranks, images 0 .. 511 of 4096, 4194304 values (512 to 512 images per rank), smoothing radius 0
+check: histogram counts 4194304 of 4194304 values
+
+cutoffs:
+  max: T = 5.745805
+  MSE: bucket 1270, T = 3.563072
+  KL: bucket 1192, T = 3.345641
+  percentile 99.9000%: bucket 828, T = 2.325816
+  percentile 99.9900%: bucket 1117, T = 3.136626
+  percentile 99.9990%: bucket 1417, T = 3.978297
+  percentile 99.9999%: bucket 1669, T = 4.685300
+result: radius 0 first 0 images 512 max 5.745805 mse 3.563072 kl 3.345641 p99.9 2.325816 p99.99 3.136626 p99.999 3.978297 p99.9999 4.685300
+
+timing: average of 5 runs after 1 warm-up; read 10.255 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        3.6652      3.6652
+  max allreduce      comm        0.0002      0.0002
+  local histogram    comp        3.8726      3.8726
+  hist allreduce     comm        0.0005      0.0005
+  smooth+percentile  comp        0.0069      0.0069
+  search             comp       36.9512     36.9512
+  minloc allreduce   comm        0.0002      0.0002
+  computation 44.4959 ms, communication 0.0009 ms, total 44.4968 ms
+mpi_ms: p 1 local_max 3.66524 max_allreduce 0.00023 local_histogram 3.87260 hist_allreduce 0.00050 smooth_percentile 0.00686 search 36.95122 minloc_allreduce 0.00017 search_fastest 36.95122 comp 44.49591 comm 0.00089 total 44.49680
+== layer 08 images 512 p 2
+data/layer08_act.bin: 2 ranks, images 0 .. 511 of 4096, 4194304 values (256 to 256 images per rank), smoothing radius 0
+check: histogram counts 4194304 of 4194304 values
+
+cutoffs:
+  max: T = 5.745805
+  MSE: bucket 1270, T = 3.563072
+  KL: bucket 1192, T = 3.345641
+  percentile 99.9000%: bucket 828, T = 2.325816
+  percentile 99.9900%: bucket 1117, T = 3.136626
+  percentile 99.9990%: bucket 1417, T = 3.978297
+  percentile 99.9999%: bucket 1669, T = 4.685300
+result: radius 0 first 0 images 512 max 5.745805 mse 3.563072 kl 3.345641 p99.9 2.325816 p99.99 3.136626 p99.999 3.978297 p99.9999 4.685300
+
+timing: average of 5 runs after 1 warm-up; read 5.686 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        1.8515      1.8181
+  max allreduce      comm        0.0011      0.0009
+  local histogram    comp        1.9451      1.9048
+  hist allreduce     comm        0.0092      0.0084
+  smooth+percentile  comp        0.0082      0.0075
+  search             comp       18.9411     18.5784
+  minloc allreduce   comm        0.0017      0.0006
+  computation 22.7458 ms, communication 0.0120 ms, total 22.7578 ms
+mpi_ms: p 2 local_max 1.85145 max_allreduce 0.00109 local_histogram 1.94510 hist_allreduce 0.00916 smooth_percentile 0.00818 search 18.94111 minloc_allreduce 0.00172 search_fastest 18.57840 comp 22.74583 comm 0.01198 total 22.75781
+== layer 08 images 512 p 4
+data/layer08_act.bin: 4 ranks, images 0 .. 511 of 4096, 4194304 values (128 to 128 images per rank), smoothing radius 0
+check: histogram counts 4194304 of 4194304 values
+
+cutoffs:
+  max: T = 5.745805
+  MSE: bucket 1270, T = 3.563072
+  KL: bucket 1192, T = 3.345641
+  percentile 99.9000%: bucket 828, T = 2.325816
+  percentile 99.9900%: bucket 1117, T = 3.136626
+  percentile 99.9990%: bucket 1417, T = 3.978297
+  percentile 99.9999%: bucket 1669, T = 4.685300
+result: radius 0 first 0 images 512 max 5.745805 mse 3.563072 kl 3.345641 p99.9 2.325816 p99.99 3.136626 p99.999 3.978297 p99.9999 4.685300
+
+timing: average of 5 runs after 1 warm-up; read 3.561 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.9765      0.9666
+  max allreduce      comm        0.0042      0.0017
+  local histogram    comp        1.0177      1.0050
+  hist allreduce     comm        0.0186      0.0166
+  smooth+percentile  comp        0.0075      0.0064
+  search             comp        9.9094      9.8142
+  minloc allreduce   comm        0.0026      0.0011
+  computation 11.9112 ms, communication 0.0254 ms, total 11.9366 ms
+mpi_ms: p 4 local_max 0.97650 max_allreduce 0.00423 local_histogram 1.01769 hist_allreduce 0.01857 smooth_percentile 0.00754 search 9.90941 minloc_allreduce 0.00263 search_fastest 9.81425 comp 11.91115 comm 0.02543 total 11.93658
+== layer 08 images 512 p 8
+data/layer08_act.bin: 8 ranks, images 0 .. 511 of 4096, 4194304 values (64 to 64 images per rank), smoothing radius 0
+check: histogram counts 4194304 of 4194304 values
+
+cutoffs:
+  max: T = 5.745805
+  MSE: bucket 1270, T = 3.563072
+  KL: bucket 1192, T = 3.345641
+  percentile 99.9000%: bucket 828, T = 2.325816
+  percentile 99.9900%: bucket 1117, T = 3.136626
+  percentile 99.9990%: bucket 1417, T = 3.978297
+  percentile 99.9999%: bucket 1669, T = 4.685300
+result: radius 0 first 0 images 512 max 5.745805 mse 3.563072 kl 3.345641 p99.9 2.325816 p99.99 3.136626 p99.999 3.978297 p99.9999 4.685300
+
+timing: average of 5 runs after 1 warm-up; read 2.644 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.4930      0.4919
+  max allreduce      comm        0.0018      0.0010
+  local histogram    comp        0.5238      0.5126
+  hist allreduce     comm        0.0152      0.0133
+  smooth+percentile  comp        0.0078      0.0064
+  search             comp        5.0753      4.9987
+  minloc allreduce   comm        0.0021      0.0011
+  computation 6.0999 ms, communication 0.0191 ms, total 6.1190 ms
+mpi_ms: p 8 local_max 0.49296 max_allreduce 0.00179 local_histogram 0.52384 hist_allreduce 0.01521 smooth_percentile 0.00784 search 5.07525 minloc_allreduce 0.00214 search_fastest 4.99872 comp 6.09989 comm 0.01913 total 6.11903
+== layer 08 images 512 p 16
+data/layer08_act.bin: 16 ranks, images 0 .. 511 of 4096, 4194304 values (32 to 32 images per rank), smoothing radius 0
+check: histogram counts 4194304 of 4194304 values
+
+cutoffs:
+  max: T = 5.745805
+  MSE: bucket 1270, T = 3.563072
+  KL: bucket 1192, T = 3.345641
+  percentile 99.9000%: bucket 828, T = 2.325816
+  percentile 99.9900%: bucket 1117, T = 3.136626
+  percentile 99.9990%: bucket 1417, T = 3.978297
+  percentile 99.9999%: bucket 1669, T = 4.685300
+result: radius 0 first 0 images 512 max 5.745805 mse 3.563072 kl 3.345641 p99.9 2.325816 p99.99 3.136626 p99.999 3.978297 p99.9999 4.685300
+
+timing: average of 5 runs after 1 warm-up; read 2.941 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.2708      0.2513
+  max allreduce      comm        0.0021      0.0011
+  local histogram    comp        0.2753      0.2597
+  hist allreduce     comm        0.0162      0.0135
+  smooth+percentile  comp        0.0087      0.0062
+  search             comp        2.6118      2.5622
+  minloc allreduce   comm        0.0026      0.0014
+  computation 3.1666 ms, communication 0.0209 ms, total 3.1876 ms
+mpi_ms: p 16 local_max 0.27080 max_allreduce 0.00214 local_histogram 0.27533 hist_allreduce 0.01619 smooth_percentile 0.00872 search 2.61180 minloc_allreduce 0.00257 search_fastest 2.56219 comp 3.16665 comm 0.02090 total 3.18755
+== layer 08 images 512 p 22
+data/layer08_act.bin: 22 ranks, images 0 .. 511 of 4096, 4194304 values (23 to 24 images per rank), smoothing radius 0
+check: histogram counts 4194304 of 4194304 values
+
+cutoffs:
+  max: T = 5.745805
+  MSE: bucket 1270, T = 3.563072
+  KL: bucket 1192, T = 3.345641
+  percentile 99.9000%: bucket 828, T = 2.325816
+  percentile 99.9900%: bucket 1117, T = 3.136626
+  percentile 99.9990%: bucket 1417, T = 3.978297
+  percentile 99.9999%: bucket 1669, T = 4.685300
+result: radius 0 first 0 images 512 max 5.745805 mse 3.563072 kl 3.345641 p99.9 2.325816 p99.99 3.136626 p99.999 3.978297 p99.9999 4.685300
+
+timing: average of 5 runs after 1 warm-up; read 3.139 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.1998      0.1893
+  max allreduce      comm        0.0065      0.0015
+  local histogram    comp        0.3046      0.1944
+  hist allreduce     comm        0.0284      0.0235
+  smooth+percentile  comp        0.0081      0.0065
+  search             comp        2.0262      1.9158
+  minloc allreduce   comm        0.0058      0.0027
+  computation 2.5387 ms, communication 0.0407 ms, total 2.5794 ms
+mpi_ms: p 22 local_max 0.19979 max_allreduce 0.00646 local_histogram 0.30459 hist_allreduce 0.02838 smooth_percentile 0.00812 search 2.02618 minloc_allreduce 0.00583 search_fastest 1.91583 comp 2.53869 comm 0.04067 total 2.57936
+== layer 08 images 512 p 32
+data/layer08_act.bin: 32 ranks, images 0 .. 511 of 4096, 4194304 values (16 to 16 images per rank), smoothing radius 0
+check: histogram counts 4194304 of 4194304 values
+
+cutoffs:
+  max: T = 5.745805
+  MSE: bucket 1270, T = 3.563072
+  KL: bucket 1192, T = 3.345641
+  percentile 99.9000%: bucket 828, T = 2.325816
+  percentile 99.9900%: bucket 1117, T = 3.136626
+  percentile 99.9990%: bucket 1417, T = 3.978297
+  percentile 99.9999%: bucket 1669, T = 4.685300
+result: radius 0 first 0 images 512 max 5.745805 mse 3.563072 kl 3.345641 p99.9 2.325816 p99.99 3.136626 p99.999 3.978297 p99.9999 4.685300
+
+timing: average of 5 runs after 1 warm-up; read 4.453 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.1406      0.1303
+  max allreduce      comm        0.0032      0.0018
+  local histogram    comp        0.2014      0.1847
+  hist allreduce     comm        0.0195      0.0157
+  smooth+percentile  comp        0.0151      0.0123
+  search             comp        2.0772      2.0042
+  minloc allreduce   comm        0.0035      0.0018
+  computation 2.4343 ms, communication 0.0262 ms, total 2.4605 ms
+mpi_ms: p 32 local_max 0.14056 max_allreduce 0.00315 local_histogram 0.20138 hist_allreduce 0.01954 smooth_percentile 0.01514 search 2.07724 minloc_allreduce 0.00347 search_fastest 2.00422 comp 2.43432 comm 0.02616 total 2.46048
+== layer 08 images 512 p 44
+data/layer08_act.bin: 44 ranks, images 0 .. 511 of 4096, 4194304 values (11 to 12 images per rank), smoothing radius 0
+check: histogram counts 4194304 of 4194304 values
+
+cutoffs:
+  max: T = 5.745805
+  MSE: bucket 1270, T = 3.563072
+  KL: bucket 1192, T = 3.345641
+  percentile 99.9000%: bucket 828, T = 2.325816
+  percentile 99.9900%: bucket 1117, T = 3.136626
+  percentile 99.9990%: bucket 1417, T = 3.978297
+  percentile 99.9999%: bucket 1669, T = 4.685300
+result: radius 0 first 0 images 512 max 5.745805 mse 3.563072 kl 3.345641 p99.9 2.325816 p99.99 3.136626 p99.999 3.978297 p99.9999 4.685300
+
+timing: average of 5 runs after 1 warm-up; read 5.777 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.0998      0.0903
+  max allreduce      comm        0.0141      0.0022
+  local histogram    comp        0.1970      0.1307
+  hist allreduce     comm        0.0364      0.0301
+  smooth+percentile  comp        0.0157      0.0125
+  search             comp        1.6729      1.4683
+  minloc allreduce   comm        0.0057      0.0028
+  computation 1.9853 ms, communication 0.0561 ms, total 2.0414 ms
+mpi_ms: p 44 local_max 0.09976 max_allreduce 0.01408 local_histogram 0.19698 hist_allreduce 0.03637 smooth_percentile 0.01566 search 1.67289 minloc_allreduce 0.00566 search_fastest 1.46825 comp 1.98529 comm 0.05611 total 2.04140
+== layer 14 images 512 p 1
+data/layer14_act.bin: 1 ranks, images 0 .. 511 of 4096, 2097152 values (512 to 512 images per rank), smoothing radius 0
+check: histogram counts 2097152 of 2097152 values
+
+cutoffs:
+  max: T = 5.851932
+  MSE: bucket 1355, T = 3.871761
+  KL: bucket 1168, T = 3.338858
+  percentile 99.9000%: bucket 820, T = 2.345916
+  percentile 99.9900%: bucket 1110, T = 3.174559
+  percentile 99.9990%: bucket 1398, T = 3.997486
+  percentile 99.9999%: bucket 1724, T = 4.928995
+result: radius 0 first 0 images 512 max 5.851932 mse 3.871761 kl 3.338858 p99.9 2.345916 p99.99 3.174559 p99.999 3.997486 p99.9999 4.928995
+
+timing: average of 5 runs after 1 warm-up; read 5.471 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        1.8500      1.8500
+  max allreduce      comm        0.0003      0.0003
+  local histogram    comp        2.1142      2.1142
+  hist allreduce     comm        0.0005      0.0005
+  smooth+percentile  comp        0.0069      0.0069
+  search             comp       36.7071     36.7071
+  minloc allreduce   comm        0.0002      0.0002
+  computation 40.6781 ms, communication 0.0010 ms, total 40.6791 ms
+mpi_ms: p 1 local_max 1.84997 max_allreduce 0.00031 local_histogram 2.11417 hist_allreduce 0.00050 smooth_percentile 0.00693 search 36.70707 minloc_allreduce 0.00015 search_fastest 36.70707 comp 40.67814 comm 0.00096 total 40.67910
+== layer 14 images 512 p 2
+data/layer14_act.bin: 2 ranks, images 0 .. 511 of 4096, 2097152 values (256 to 256 images per rank), smoothing radius 0
+check: histogram counts 2097152 of 2097152 values
+
+cutoffs:
+  max: T = 5.851932
+  MSE: bucket 1355, T = 3.871761
+  KL: bucket 1168, T = 3.338858
+  percentile 99.9000%: bucket 820, T = 2.345916
+  percentile 99.9900%: bucket 1110, T = 3.174559
+  percentile 99.9990%: bucket 1398, T = 3.997486
+  percentile 99.9999%: bucket 1724, T = 4.928995
+result: radius 0 first 0 images 512 max 5.851932 mse 3.871761 kl 3.338858 p99.9 2.345916 p99.99 3.174559 p99.999 3.997486 p99.9999 4.928995
+
+timing: average of 5 runs after 1 warm-up; read 2.901 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.9317      0.9193
+  max allreduce      comm        0.0008      0.0006
+  local histogram    comp        1.0645      1.0520
+  hist allreduce     comm        0.0074      0.0068
+  smooth+percentile  comp        0.0076      0.0067
+  search             comp       18.7821     18.5450
+  minloc allreduce   comm        0.0013      0.0005
+  computation 20.7859 ms, communication 0.0096 ms, total 20.7955 ms
+mpi_ms: p 2 local_max 0.93171 max_allreduce 0.00080 local_histogram 1.06448 hist_allreduce 0.00743 smooth_percentile 0.00756 search 18.78213 minloc_allreduce 0.00135 search_fastest 18.54503 comp 20.78588 comm 0.00957 total 20.79545
+== layer 14 images 512 p 4
+data/layer14_act.bin: 4 ranks, images 0 .. 511 of 4096, 2097152 values (128 to 128 images per rank), smoothing radius 0
+check: histogram counts 2097152 of 2097152 values
+
+cutoffs:
+  max: T = 5.851932
+  MSE: bucket 1355, T = 3.871761
+  KL: bucket 1168, T = 3.338858
+  percentile 99.9000%: bucket 820, T = 2.345916
+  percentile 99.9900%: bucket 1110, T = 3.174559
+  percentile 99.9990%: bucket 1398, T = 3.997486
+  percentile 99.9999%: bucket 1724, T = 4.928995
+result: radius 0 first 0 images 512 max 5.851932 mse 3.871761 kl 3.338858 p99.9 2.345916 p99.99 3.174559 p99.999 3.997486 p99.9999 4.928995
+
+timing: average of 5 runs after 1 warm-up; read 2.318 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.4839      0.4815
+  max allreduce      comm        0.0034      0.0015
+  local histogram    comp        0.5652      0.5536
+  hist allreduce     comm        0.0164      0.0149
+  smooth+percentile  comp        0.0084      0.0063
+  search             comp        9.8304      9.7626
+  minloc allreduce   comm        0.0019      0.0010
+  computation 10.8879 ms, communication 0.0217 ms, total 10.9096 ms
+mpi_ms: p 4 local_max 0.48392 max_allreduce 0.00339 local_histogram 0.56519 hist_allreduce 0.01643 smooth_percentile 0.00837 search 9.83040 minloc_allreduce 0.00193 search_fastest 9.76263 comp 10.88788 comm 0.02175 total 10.90963
+== layer 14 images 512 p 8
+data/layer14_act.bin: 8 ranks, images 0 .. 511 of 4096, 2097152 values (64 to 64 images per rank), smoothing radius 0
+check: histogram counts 2097152 of 2097152 values
+
+cutoffs:
+  max: T = 5.851932
+  MSE: bucket 1355, T = 3.871761
+  KL: bucket 1168, T = 3.338858
+  percentile 99.9000%: bucket 820, T = 2.345916
+  percentile 99.9900%: bucket 1110, T = 3.174559
+  percentile 99.9990%: bucket 1398, T = 3.997486
+  percentile 99.9999%: bucket 1724, T = 4.928995
+result: radius 0 first 0 images 512 max 5.851932 mse 3.871761 kl 3.338858 p99.9 2.345916 p99.99 3.174559 p99.999 3.997486 p99.9999 4.928995
+
+timing: average of 5 runs after 1 warm-up; read 2.053 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.2481      0.2461
+  max allreduce      comm        0.0014      0.0008
+  local histogram    comp        0.2879      0.2808
+  hist allreduce     comm        0.0133      0.0122
+  smooth+percentile  comp        0.0083      0.0062
+  search             comp        5.1025      4.9959
+  minloc allreduce   comm        0.0020      0.0009
+  computation 5.6467 ms, communication 0.0167 ms, total 5.6634 ms
+mpi_ms: p 8 local_max 0.24811 max_allreduce 0.00143 local_histogram 0.28787 hist_allreduce 0.01326 smooth_percentile 0.00827 search 5.10247 minloc_allreduce 0.00201 search_fastest 4.99587 comp 5.64673 comm 0.01670 total 5.66344
+== layer 14 images 512 p 16
+data/layer14_act.bin: 16 ranks, images 0 .. 511 of 4096, 2097152 values (32 to 32 images per rank), smoothing radius 0
+check: histogram counts 2097152 of 2097152 values
+
+cutoffs:
+  max: T = 5.851932
+  MSE: bucket 1355, T = 3.871761
+  KL: bucket 1168, T = 3.338858
+  percentile 99.9000%: bucket 820, T = 2.345916
+  percentile 99.9900%: bucket 1110, T = 3.174559
+  percentile 99.9990%: bucket 1398, T = 3.997486
+  percentile 99.9999%: bucket 1724, T = 4.928995
+result: radius 0 first 0 images 512 max 5.851932 mse 3.871761 kl 3.338858 p99.9 2.345916 p99.99 3.174559 p99.999 3.997486 p99.9999 4.928995
+
+timing: average of 5 runs after 1 warm-up; read 2.503 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.1303      0.1288
+  max allreduce      comm        0.0021      0.0011
+  local histogram    comp        0.1636      0.1451
+  hist allreduce     comm        0.0153      0.0132
+  smooth+percentile  comp        0.0081      0.0064
+  search             comp        2.6661      2.5792
+  minloc allreduce   comm        0.0028      0.0013
+  computation 2.9681 ms, communication 0.0202 ms, total 2.9882 ms
+mpi_ms: p 16 local_max 0.13025 max_allreduce 0.00207 local_histogram 0.16363 hist_allreduce 0.01528 smooth_percentile 0.00808 search 2.66609 minloc_allreduce 0.00281 search_fastest 2.57924 comp 2.96805 comm 0.02016 total 2.98821
+== layer 14 images 512 p 22
+data/layer14_act.bin: 22 ranks, images 0 .. 511 of 4096, 2097152 values (23 to 24 images per rank), smoothing radius 0
+check: histogram counts 2097152 of 2097152 values
+
+cutoffs:
+  max: T = 5.851932
+  MSE: bucket 1355, T = 3.871761
+  KL: bucket 1168, T = 3.338858
+  percentile 99.9000%: bucket 820, T = 2.345916
+  percentile 99.9900%: bucket 1110, T = 3.174559
+  percentile 99.9990%: bucket 1398, T = 3.997486
+  percentile 99.9999%: bucket 1724, T = 4.928995
+result: radius 0 first 0 images 512 max 5.851932 mse 3.871761 kl 3.338858 p99.9 2.345916 p99.99 3.174559 p99.999 3.997486 p99.9999 4.928995
+
+timing: average of 5 runs after 1 warm-up; read 2.737 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.1039      0.0944
+  max allreduce      comm        0.0073      0.0021
+  local histogram    comp        0.1190      0.1067
+  hist allreduce     comm        0.0274      0.0227
+  smooth+percentile  comp        0.0082      0.0065
+  search             comp        2.0747      1.9429
+  minloc allreduce   comm        0.0093      0.0022
+  computation 2.3058 ms, communication 0.0440 ms, total 2.3498 ms
+mpi_ms: p 22 local_max 0.10395 max_allreduce 0.00733 local_histogram 0.11902 hist_allreduce 0.02738 smooth_percentile 0.00819 search 2.07468 minloc_allreduce 0.00930 search_fastest 1.94294 comp 2.30585 comm 0.04400 total 2.34985
+== layer 14 images 512 p 32
+data/layer14_act.bin: 32 ranks, images 0 .. 511 of 4096, 2097152 values (16 to 16 images per rank), smoothing radius 0
+check: histogram counts 2097152 of 2097152 values
+
+cutoffs:
+  max: T = 5.851932
+  MSE: bucket 1355, T = 3.871761
+  KL: bucket 1168, T = 3.338858
+  percentile 99.9000%: bucket 820, T = 2.345916
+  percentile 99.9900%: bucket 1110, T = 3.174559
+  percentile 99.9990%: bucket 1398, T = 3.997486
+  percentile 99.9999%: bucket 1724, T = 4.928995
+result: radius 0 first 0 images 512 max 5.851932 mse 3.871761 kl 3.338858 p99.9 2.345916 p99.99 3.174559 p99.999 3.997486 p99.9999 4.928995
+
+timing: average of 5 runs after 1 warm-up; read 4.198 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.0661      0.0651
+  max allreduce      comm        0.0034      0.0019
+  local histogram    comp        0.1044      0.0955
+  hist allreduce     comm        0.0182      0.0145
+  smooth+percentile  comp        0.0239      0.0127
+  search             comp        2.0567      1.9808
+  minloc allreduce   comm        0.0092      0.0017
+  computation 2.2511 ms, communication 0.0309 ms, total 2.2819 ms
+mpi_ms: p 32 local_max 0.06609 max_allreduce 0.00340 local_histogram 0.10439 hist_allreduce 0.01824 smooth_percentile 0.02386 search 2.05672 minloc_allreduce 0.00922 search_fastest 1.98079 comp 2.25107 comm 0.03086 total 2.28193
+== layer 14 images 512 p 44
+data/layer14_act.bin: 44 ranks, images 0 .. 511 of 4096, 2097152 values (11 to 12 images per rank), smoothing radius 0
+check: histogram counts 2097152 of 2097152 values
+
+cutoffs:
+  max: T = 5.851932
+  MSE: bucket 1355, T = 3.871761
+  KL: bucket 1168, T = 3.338858
+  percentile 99.9000%: bucket 820, T = 2.345916
+  percentile 99.9900%: bucket 1110, T = 3.174559
+  percentile 99.9990%: bucket 1398, T = 3.997486
+  percentile 99.9999%: bucket 1724, T = 4.928995
+result: radius 0 first 0 images 512 max 5.851932 mse 3.871761 kl 3.338858 p99.9 2.345916 p99.99 3.174559 p99.999 3.997486 p99.9999 4.928995
+
+timing: average of 5 runs after 1 warm-up; read 6.039 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.0512      0.0452
+  max allreduce      comm        0.0092      0.0024
+  local histogram    comp        0.0810      0.0666
+  hist allreduce     comm        0.0360      0.0293
+  smooth+percentile  comp        0.0138      0.0126
+  search             comp        1.5269      1.4521
+  minloc allreduce   comm        0.0160      0.0027
+  computation 1.6730 ms, communication 0.0612 ms, total 1.7342 ms
+mpi_ms: p 44 local_max 0.05125 max_allreduce 0.00922 local_histogram 0.08101 hist_allreduce 0.03601 smooth_percentile 0.01381 search 1.52692 minloc_allreduce 0.01596 search_fastest 1.45205 comp 1.67299 comm 0.06119 total 1.73418
+== layer 19 images 512 p 1
+data/layer19_act.bin: 1 ranks, images 0 .. 511 of 4096, 32768 values (512 to 512 images per rank), smoothing radius 0
+check: histogram counts 32768 of 32768 values
+
+cutoffs:
+  max: T = 6.027231
+  MSE: bucket 1793, T = 5.276770
+  KL: bucket 1912, T = 5.628457
+  percentile 99.9000%: bucket 1511, T = 4.449791
+  percentile 99.9900%: bucket 1801, T = 5.303257
+  percentile 99.9990%: bucket 2047, T = 6.027231
+  percentile 99.9999%: bucket 2047, T = 6.027231
+result: radius 0 first 0 images 512 max 6.027231 mse 5.276770 kl 5.628457 p99.9 4.449791 p99.99 5.303257 p99.999 6.027231 p99.9999 6.027231
+
+timing: average of 5 runs after 1 warm-up; read 0.838 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.0286      0.0286
+  max allreduce      comm        0.0000      0.0000
+  local histogram    comp        0.0209      0.0209
+  hist allreduce     comm        0.0001      0.0001
+  smooth+percentile  comp        0.0067      0.0067
+  search             comp       37.7249     37.7249
+  minloc allreduce   comm        0.0000      0.0000
+  computation 37.7811 ms, communication 0.0002 ms, total 37.7813 ms
+mpi_ms: p 1 local_max 0.02857 max_allreduce 0.00004 local_histogram 0.02093 hist_allreduce 0.00011 smooth_percentile 0.00670 search 37.72492 minloc_allreduce 0.00003 search_fastest 37.72492 comp 37.78112 comm 0.00017 total 37.78130
+== layer 19 images 512 p 2
+data/layer19_act.bin: 2 ranks, images 0 .. 511 of 4096, 32768 values (256 to 256 images per rank), smoothing radius 0
+check: histogram counts 32768 of 32768 values
+
+cutoffs:
+  max: T = 6.027231
+  MSE: bucket 1793, T = 5.276770
+  KL: bucket 1912, T = 5.628457
+  percentile 99.9000%: bucket 1511, T = 4.449791
+  percentile 99.9900%: bucket 1801, T = 5.303257
+  percentile 99.9990%: bucket 2047, T = 6.027231
+  percentile 99.9999%: bucket 2047, T = 6.027231
+result: radius 0 first 0 images 512 max 6.027231 mse 5.276770 kl 5.628457 p99.9 4.449791 p99.99 5.303257 p99.999 6.027231 p99.9999 6.027231
+
+timing: average of 5 runs after 1 warm-up; read 0.883 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.0162      0.0140
+  max allreduce      comm        0.0005      0.0004
+  local histogram    comp        0.0124      0.0094
+  hist allreduce     comm        0.0047      0.0041
+  smooth+percentile  comp        0.0085      0.0080
+  search             comp       19.3188     18.7547
+  minloc allreduce   comm        0.0011      0.0003
+  computation 19.3558 ms, communication 0.0064 ms, total 19.3622 ms
+mpi_ms: p 2 local_max 0.01619 max_allreduce 0.00053 local_histogram 0.01236 hist_allreduce 0.00472 smooth_percentile 0.00851 search 19.31877 minloc_allreduce 0.00112 search_fastest 18.75469 comp 19.35584 comm 0.00637 total 19.36221
+== layer 19 images 512 p 4
+data/layer19_act.bin: 4 ranks, images 0 .. 511 of 4096, 32768 values (128 to 128 images per rank), smoothing radius 0
+check: histogram counts 32768 of 32768 values
+
+cutoffs:
+  max: T = 6.027231
+  MSE: bucket 1793, T = 5.276770
+  KL: bucket 1912, T = 5.628457
+  percentile 99.9000%: bucket 1511, T = 4.449791
+  percentile 99.9900%: bucket 1801, T = 5.303257
+  percentile 99.9990%: bucket 2047, T = 6.027231
+  percentile 99.9999%: bucket 2047, T = 6.027231
+result: radius 0 first 0 images 512 max 6.027231 mse 5.276770 kl 5.628457 p99.9 4.449791 p99.99 5.303257 p99.999 6.027231 p99.9999 6.027231
+
+timing: average of 5 runs after 1 warm-up; read 1.078 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.0091      0.0075
+  max allreduce      comm        0.0028      0.0012
+  local histogram    comp        0.0064      0.0051
+  hist allreduce     comm        0.0135      0.0123
+  smooth+percentile  comp        0.0084      0.0071
+  search             comp       10.1584     10.0936
+  minloc allreduce   comm        0.0015      0.0007
+  computation 10.1823 ms, communication 0.0178 ms, total 10.2001 ms
+mpi_ms: p 4 local_max 0.00913 max_allreduce 0.00283 local_histogram 0.00639 hist_allreduce 0.01345 smooth_percentile 0.00837 search 10.15844 minloc_allreduce 0.00150 search_fastest 10.09363 comp 10.18233 comm 0.01778 total 10.20011
+== layer 19 images 512 p 8
+data/layer19_act.bin: 8 ranks, images 0 .. 511 of 4096, 32768 values (64 to 64 images per rank), smoothing radius 0
+check: histogram counts 32768 of 32768 values
+
+cutoffs:
+  max: T = 6.027231
+  MSE: bucket 1793, T = 5.276770
+  KL: bucket 1912, T = 5.628457
+  percentile 99.9000%: bucket 1511, T = 4.449791
+  percentile 99.9900%: bucket 1801, T = 5.303257
+  percentile 99.9990%: bucket 2047, T = 6.027231
+  percentile 99.9999%: bucket 2047, T = 6.027231
+result: radius 0 first 0 images 512 max 6.027231 mse 5.276770 kl 5.628457 p99.9 4.449791 p99.99 5.303257 p99.999 6.027231 p99.9999 6.027231
+
+timing: average of 5 runs after 1 warm-up; read 1.331 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.0053      0.0038
+  max allreduce      comm        0.0014      0.0008
+  local histogram    comp        0.0041      0.0026
+  hist allreduce     comm        0.0128      0.0106
+  smooth+percentile  comp        0.0091      0.0072
+  search             comp        5.2678      5.1612
+  minloc allreduce   comm        0.0021      0.0008
+  computation 5.2863 ms, communication 0.0163 ms, total 5.3026 ms
+mpi_ms: p 8 local_max 0.00526 max_allreduce 0.00143 local_histogram 0.00413 hist_allreduce 0.01285 smooth_percentile 0.00912 search 5.26779 minloc_allreduce 0.00205 search_fastest 5.16117 comp 5.28630 comm 0.01633 total 5.30263
+== layer 19 images 512 p 16
+data/layer19_act.bin: 16 ranks, images 0 .. 511 of 4096, 32768 values (32 to 32 images per rank), smoothing radius 0
+check: histogram counts 32768 of 32768 values
+
+cutoffs:
+  max: T = 6.027231
+  MSE: bucket 1793, T = 5.276770
+  KL: bucket 1912, T = 5.628457
+  percentile 99.9000%: bucket 1511, T = 4.449791
+  percentile 99.9900%: bucket 1801, T = 5.303257
+  percentile 99.9990%: bucket 2047, T = 6.027231
+  percentile 99.9999%: bucket 2047, T = 6.027231
+result: radius 0 first 0 images 512 max 6.027231 mse 5.276770 kl 5.628457 p99.9 4.449791 p99.99 5.303257 p99.999 6.027231 p99.9999 6.027231
+
+timing: average of 5 runs after 1 warm-up; read 2.061 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.0031      0.0020
+  max allreduce      comm        0.0022      0.0010
+  local histogram    comp        0.0023      0.0014
+  hist allreduce     comm        0.0147      0.0120
+  smooth+percentile  comp        0.0095      0.0074
+  search             comp        2.8491      2.6576
+  minloc allreduce   comm        0.0025      0.0012
+  computation 2.8640 ms, communication 0.0193 ms, total 2.8833 ms
+mpi_ms: p 16 local_max 0.00307 max_allreduce 0.00216 local_histogram 0.00230 hist_allreduce 0.01466 smooth_percentile 0.00953 search 2.84910 minloc_allreduce 0.00246 search_fastest 2.65759 comp 2.86399 comm 0.01928 total 2.88327
+== layer 19 images 512 p 22
+data/layer19_act.bin: 22 ranks, images 0 .. 511 of 4096, 32768 values (23 to 24 images per rank), smoothing radius 0
+check: histogram counts 32768 of 32768 values
+
+cutoffs:
+  max: T = 6.027231
+  MSE: bucket 1793, T = 5.276770
+  KL: bucket 1912, T = 5.628457
+  percentile 99.9000%: bucket 1511, T = 4.449791
+  percentile 99.9900%: bucket 1801, T = 5.303257
+  percentile 99.9990%: bucket 2047, T = 6.027231
+  percentile 99.9999%: bucket 2047, T = 6.027231
+result: radius 0 first 0 images 512 max 6.027231 mse 5.276770 kl 5.628457 p99.9 4.449791 p99.99 5.303257 p99.999 6.027231 p99.9999 6.027231
+
+timing: average of 5 runs after 1 warm-up; read 2.670 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.0022      0.0015
+  max allreduce      comm        0.0058      0.0020
+  local histogram    comp        0.0020      0.0011
+  hist allreduce     comm        0.0282      0.0226
+  smooth+percentile  comp        0.0093      0.0077
+  search             comp        2.1020      2.0179
+  minloc allreduce   comm        0.0133      0.0020
+  computation 2.1155 ms, communication 0.0473 ms, total 2.1628 ms
+mpi_ms: p 22 local_max 0.00223 max_allreduce 0.00582 local_histogram 0.00202 hist_allreduce 0.02816 smooth_percentile 0.00927 search 2.10196 minloc_allreduce 0.01331 search_fastest 2.01787 comp 2.11548 comm 0.04728 total 2.16276
+== layer 19 images 512 p 32
+data/layer19_act.bin: 32 ranks, images 0 .. 511 of 4096, 32768 values (16 to 16 images per rank), smoothing radius 0
+check: histogram counts 32768 of 32768 values
+
+cutoffs:
+  max: T = 6.027231
+  MSE: bucket 1793, T = 5.276770
+  KL: bucket 1912, T = 5.628457
+  percentile 99.9000%: bucket 1511, T = 4.449791
+  percentile 99.9900%: bucket 1801, T = 5.303257
+  percentile 99.9990%: bucket 2047, T = 6.027231
+  percentile 99.9999%: bucket 2047, T = 6.027231
+result: radius 0 first 0 images 512 max 6.027231 mse 5.276770 kl 5.628457 p99.9 4.449791 p99.99 5.303257 p99.999 6.027231 p99.9999 6.027231
+
+timing: average of 5 runs after 1 warm-up; read 3.971 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.0011      0.0010
+  max allreduce      comm        0.0035      0.0019
+  local histogram    comp        0.0024      0.0015
+  hist allreduce     comm        0.0183      0.0150
+  smooth+percentile  comp        0.0162      0.0151
+  search             comp        2.1880      2.1071
+  minloc allreduce   comm        0.0085      0.0019
+  computation 2.2077 ms, communication 0.0304 ms, total 2.2381 ms
+mpi_ms: p 32 local_max 0.00112 max_allreduce 0.00354 local_histogram 0.00236 hist_allreduce 0.01829 smooth_percentile 0.01621 search 2.18802 minloc_allreduce 0.00853 search_fastest 2.10713 comp 2.20771 comm 0.03036 total 2.23806
+== layer 19 images 512 p 44
+data/layer19_act.bin: 44 ranks, images 0 .. 511 of 4096, 32768 values (11 to 12 images per rank), smoothing radius 0
+check: histogram counts 32768 of 32768 values
+
+cutoffs:
+  max: T = 6.027231
+  MSE: bucket 1793, T = 5.276770
+  KL: bucket 1912, T = 5.628457
+  percentile 99.9000%: bucket 1511, T = 4.449791
+  percentile 99.9900%: bucket 1801, T = 5.303257
+  percentile 99.9990%: bucket 2047, T = 6.027231
+  percentile 99.9999%: bucket 2047, T = 6.027231
+result: radius 0 first 0 images 512 max 6.027231 mse 5.276770 kl 5.628457 p99.9 4.449791 p99.99 5.303257 p99.999 6.027231 p99.9999 6.027231
+
+timing: average of 5 runs after 1 warm-up; read 5.229 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        0.0018      0.0007
+  max allreduce      comm        0.0127      0.0021
+  local histogram    comp        0.0033      0.0010
+  hist allreduce     comm        0.0356      0.0289
+  smooth+percentile  comp        0.0185      0.0149
+  search             comp        1.6005      1.5224
+  minloc allreduce   comm        0.0118      0.0023
+  computation 1.6240 ms, communication 0.0601 ms, total 1.6841 ms
+mpi_ms: p 44 local_max 0.00176 max_allreduce 0.01265 local_histogram 0.00331 hist_allreduce 0.03564 smooth_percentile 0.01846 search 1.60047 minloc_allreduce 0.01180 search_fastest 1.52242 comp 1.62399 comm 0.06009 total 1.68408
+== layer 01 images 4096 p 1
+data/layer01_act.bin: 1 ranks, images 0 .. 4095 of 4096, 67108864 values (4096 to 4096 images per rank), smoothing radius 0
+check: histogram counts 67108864 of 67108864 values
+
+cutoffs:
+  max: T = 7.001106
+  MSE: bucket 1556, T = 5.319200
+  KL: bucket 1833, T = 6.267836
+  percentile 99.9000%: bucket 963, T = 3.295443
+  percentile 99.9900%: bucket 1411, T = 4.826935
+  percentile 99.9990%: bucket 1751, T = 5.989228
+  percentile 99.9999%: bucket 1972, T = 6.744718
+result: radius 0 first 0 images 4096 max 7.001106 mse 5.319200 kl 6.267836 p99.9 3.295443 p99.99 4.826935 p99.999 5.989228 p99.9999 6.744718
+
+timing: average of 5 runs after 1 warm-up; read 129.344 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp       60.7238     60.7238
+  max allreduce      comm        0.0003      0.0003
+  local histogram    comp       66.9548     66.9548
+  hist allreduce     comm        0.0004      0.0004
+  smooth+percentile  comp        0.0075      0.0075
+  search             comp       39.5745     39.5745
+  minloc allreduce   comm        0.0002      0.0002
+  computation 167.2606 ms, communication 0.0010 ms, total 167.2615 ms
+mpi_ms: p 1 local_max 60.72382 max_allreduce 0.00031 local_histogram 66.95477 hist_allreduce 0.00045 smooth_percentile 0.00751 search 39.57448 minloc_allreduce 0.00019 search_fastest 39.57448 comp 167.26058 comm 0.00095 total 167.26153
+== layer 01 images 4096 p 2
+data/layer01_act.bin: 2 ranks, images 0 .. 4095 of 4096, 67108864 values (2048 to 2048 images per rank), smoothing radius 0
+check: histogram counts 67108864 of 67108864 values
+
+cutoffs:
+  max: T = 7.001106
+  MSE: bucket 1556, T = 5.319200
+  KL: bucket 1833, T = 6.267836
+  percentile 99.9000%: bucket 963, T = 3.295443
+  percentile 99.9900%: bucket 1411, T = 4.826935
+  percentile 99.9990%: bucket 1751, T = 5.989228
+  percentile 99.9999%: bucket 1972, T = 6.744718
+result: radius 0 first 0 images 4096 max 7.001106 mse 5.319200 kl 6.267836 p99.9 3.295443 p99.99 4.826935 p99.999 5.989228 p99.9999 6.744718
+
+timing: average of 5 runs after 1 warm-up; read 61.940 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp       30.2832     29.2939
+  max allreduce      comm        0.0017      0.0012
+  local histogram    comp       33.1020     31.1417
+  hist allreduce     comm        0.0107      0.0100
+  smooth+percentile  comp        0.0087      0.0077
+  search             comp       20.0009     19.6767
+  minloc allreduce   comm        0.0012      0.0007
+  computation 83.3948 ms, communication 0.0136 ms, total 83.4084 ms
+mpi_ms: p 2 local_max 30.28323 max_allreduce 0.00165 local_histogram 33.10202 hist_allreduce 0.01070 smooth_percentile 0.00868 search 20.00091 minloc_allreduce 0.00122 search_fastest 19.67667 comp 83.39484 comm 0.01358 total 83.40842
+== layer 01 images 4096 p 4
+data/layer01_act.bin: 4 ranks, images 0 .. 4095 of 4096, 67108864 values (1024 to 1024 images per rank), smoothing radius 0
+check: histogram counts 67108864 of 67108864 values
+
+cutoffs:
+  max: T = 7.001106
+  MSE: bucket 1556, T = 5.319200
+  KL: bucket 1833, T = 6.267836
+  percentile 99.9000%: bucket 963, T = 3.295443
+  percentile 99.9900%: bucket 1411, T = 4.826935
+  percentile 99.9990%: bucket 1751, T = 5.989228
+  percentile 99.9999%: bucket 1972, T = 6.744718
+result: radius 0 first 0 images 4096 max 7.001106 mse 5.319200 kl 6.267836 p99.9 3.295443 p99.99 4.826935 p99.999 5.989228 p99.9999 6.744718
+
+timing: average of 5 runs after 1 warm-up; read 34.508 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp       15.9268     15.6392
+  max allreduce      comm        0.0059      0.0021
+  local histogram    comp       17.3305     16.3631
+  hist allreduce     comm        0.0232      0.0208
+  smooth+percentile  comp        0.0092      0.0076
+  search             comp       10.3950     10.2430
+  minloc allreduce   comm        0.0017      0.0013
+  computation 43.6614 ms, communication 0.0307 ms, total 43.6922 ms
+mpi_ms: p 4 local_max 15.92676 max_allreduce 0.00590 local_histogram 17.33053 hist_allreduce 0.02318 smooth_percentile 0.00916 search 10.39498 minloc_allreduce 0.00166 search_fastest 10.24297 comp 43.66143 comm 0.03074 total 43.69217
+== layer 01 images 4096 p 8
+data/layer01_act.bin: 8 ranks, images 0 .. 4095 of 4096, 67108864 values (512 to 512 images per rank), smoothing radius 0
+check: histogram counts 67108864 of 67108864 values
+
+cutoffs:
+  max: T = 7.001106
+  MSE: bucket 1556, T = 5.319200
+  KL: bucket 1833, T = 6.267836
+  percentile 99.9000%: bucket 963, T = 3.295443
+  percentile 99.9900%: bucket 1411, T = 4.826935
+  percentile 99.9990%: bucket 1751, T = 5.989228
+  percentile 99.9999%: bucket 1972, T = 6.744718
+result: radius 0 first 0 images 4096 max 7.001106 mse 5.319200 kl 6.267836 p99.9 3.295443 p99.99 4.826935 p99.999 5.989228 p99.9999 6.744718
+
+timing: average of 5 runs after 1 warm-up; read 20.710 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        8.0492      7.9052
+  max allreduce      comm        0.0043      0.0018
+  local histogram    comp       12.4411      8.2743
+  hist allreduce     comm        0.0243      0.0218
+  smooth+percentile  comp        0.0097      0.0077
+  search             comp        5.3896      5.3097
+  minloc allreduce   comm        0.0020      0.0014
+  computation 25.8895 ms, communication 0.0306 ms, total 25.9201 ms
+mpi_ms: p 8 local_max 8.04918 max_allreduce 0.00429 local_histogram 12.44110 hist_allreduce 0.02430 smooth_percentile 0.00966 search 5.38956 minloc_allreduce 0.00202 search_fastest 5.30974 comp 25.88949 comm 0.03061 total 25.92010
+== layer 01 images 4096 p 16
+data/layer01_act.bin: 16 ranks, images 0 .. 4095 of 4096, 67108864 values (256 to 256 images per rank), smoothing radius 0
+check: histogram counts 67108864 of 67108864 values
+
+cutoffs:
+  max: T = 7.001106
+  MSE: bucket 1556, T = 5.319200
+  KL: bucket 1833, T = 6.267836
+  percentile 99.9000%: bucket 963, T = 3.295443
+  percentile 99.9900%: bucket 1411, T = 4.826935
+  percentile 99.9990%: bucket 1751, T = 5.989228
+  percentile 99.9999%: bucket 1972, T = 6.744718
+result: radius 0 first 0 images 4096 max 7.001106 mse 5.319200 kl 6.267836 p99.9 3.295443 p99.99 4.826935 p99.999 5.989228 p99.9999 6.744718
+
+timing: average of 5 runs after 1 warm-up; read 15.705 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        4.1507      4.0600
+  max allreduce      comm        0.0036      0.0021
+  local histogram    comp        4.5680      4.2560
+  hist allreduce     comm        0.0268      0.0233
+  smooth+percentile  comp        0.0116      0.0080
+  search             comp        2.7888      2.6950
+  minloc allreduce   comm        0.0047      0.0021
+  computation 11.5191 ms, communication 0.0351 ms, total 11.5542 ms
+mpi_ms: p 16 local_max 4.15072 max_allreduce 0.00359 local_histogram 4.56801 hist_allreduce 0.02678 smooth_percentile 0.01159 search 2.78879 minloc_allreduce 0.00473 search_fastest 2.69500 comp 11.51910 comm 0.03510 total 11.55420
+== layer 01 images 4096 p 22
+data/layer01_act.bin: 22 ranks, images 0 .. 4095 of 4096, 67108864 values (186 to 187 images per rank), smoothing radius 0
+check: histogram counts 67108864 of 67108864 values
+
+cutoffs:
+  max: T = 7.001106
+  MSE: bucket 1556, T = 5.319200
+  KL: bucket 1833, T = 6.267836
+  percentile 99.9000%: bucket 963, T = 3.295443
+  percentile 99.9900%: bucket 1411, T = 4.826935
+  percentile 99.9990%: bucket 1751, T = 5.989228
+  percentile 99.9999%: bucket 1972, T = 6.744718
+result: radius 0 first 0 images 4096 max 7.001106 mse 5.319200 kl 6.267836 p99.9 3.295443 p99.99 4.826935 p99.999 5.989228 p99.9999 6.744718
+
+timing: average of 5 runs after 1 warm-up; read 14.185 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        3.1698      3.1035
+  max allreduce      comm        0.0075      0.0046
+  local histogram    comp        5.6092      3.2497
+  hist allreduce     comm        0.0519      0.0413
+  smooth+percentile  comp        0.0112      0.0081
+  search             comp        2.1455      2.0464
+  minloc allreduce   comm        0.0148      0.0037
+  computation 10.9358 ms, communication 0.0741 ms, total 11.0099 ms
+mpi_ms: p 22 local_max 3.16984 max_allreduce 0.00748 local_histogram 5.60922 hist_allreduce 0.05187 smooth_percentile 0.01123 search 2.14548 minloc_allreduce 0.01475 search_fastest 2.04636 comp 10.93577 comm 0.07410 total 11.00987
+== layer 01 images 4096 p 32
+data/layer01_act.bin: 32 ranks, images 0 .. 4095 of 4096, 67108864 values (128 to 128 images per rank), smoothing radius 0
+check: histogram counts 67108864 of 67108864 values
+
+cutoffs:
+  max: T = 7.001106
+  MSE: bucket 1556, T = 5.319200
+  KL: bucket 1833, T = 6.267836
+  percentile 99.9000%: bucket 963, T = 3.295443
+  percentile 99.9900%: bucket 1411, T = 4.826935
+  percentile 99.9990%: bucket 1751, T = 5.989228
+  percentile 99.9999%: bucket 1972, T = 6.744718
+result: radius 0 first 0 images 4096 max 7.001106 mse 5.319200 kl 6.267836 p99.9 3.295443 p99.99 4.826935 p99.999 5.989228 p99.9999 6.744718
+
+timing: average of 5 runs after 1 warm-up; read 16.848 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        2.2926      2.1498
+  max allreduce      comm        0.0060      0.0031
+  local histogram    comp        4.4809      3.1457
+  hist allreduce     comm        0.0368      0.0335
+  smooth+percentile  comp        0.0215      0.0127
+  search             comp        2.1339      2.0622
+  minloc allreduce   comm        0.0049      0.0023
+  computation 8.9290 ms, communication 0.0477 ms, total 8.9767 ms
+mpi_ms: p 32 local_max 2.29264 max_allreduce 0.00597 local_histogram 4.48092 hist_allreduce 0.03682 smooth_percentile 0.02147 search 2.13392 minloc_allreduce 0.00492 search_fastest 2.06215 comp 8.92896 comm 0.04771 total 8.97667
+== layer 01 images 4096 p 44
+data/layer01_act.bin: 44 ranks, images 0 .. 4095 of 4096, 67108864 values (93 to 94 images per rank), smoothing radius 0
+check: histogram counts 67108864 of 67108864 values
+
+cutoffs:
+  max: T = 7.001106
+  MSE: bucket 1556, T = 5.319200
+  KL: bucket 1833, T = 6.267836
+  percentile 99.9000%: bucket 963, T = 3.295443
+  percentile 99.9900%: bucket 1411, T = 4.826935
+  percentile 99.9990%: bucket 1751, T = 5.989228
+  percentile 99.9999%: bucket 1972, T = 6.744718
+result: radius 0 first 0 images 4096 max 7.001106 mse 5.319200 kl 6.267836 p99.9 3.295443 p99.99 4.826935 p99.999 5.989228 p99.9999 6.744718
+
+timing: average of 5 runs after 1 warm-up; read 16.549 ms (I/O, not counted)
+  phase              kind    slowest ms  fastest ms
+  local max          comp        2.1080      1.8604
+  max allreduce      comm        0.0166      0.0063
+  local histogram    comp        3.1415      2.3729
+  hist allreduce     comm        0.0669      0.0597
+  smooth+percentile  comp        0.0177      0.0150
+  search             comp        1.7372      1.5464
+  minloc allreduce   comm        0.0141      0.0037
+  computation 7.0044 ms, communication 0.0976 ms, total 7.1020 ms
+mpi_ms: p 44 local_max 2.10802 max_allreduce 0.01656 local_histogram 3.14153 hist_allreduce 0.06694 smooth_percentile 0.01767 search 1.73718 minloc_allreduce 0.01407 search_fastest 1.54641 comp 7.00440 comm 0.09757 total 7.10197

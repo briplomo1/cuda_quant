@@ -4,6 +4,6 @@ data/
 checkpoints/
 results/csv/
 __pycache__/
-.idea
+.idea/
 *.exe
-.venv
+.venv/
