@@ -1,0 +1,5 @@
+# For prepare.py. The cu128 builds support the server's Blackwell GPUs.
+--extra-index-url https://download.pytorch.org/whl/cu128
+numpy>=1.26
+torch==2.7.1+cu128
+torchvision==0.22.1+cu128

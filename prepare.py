@@ -72,7 +72,7 @@ def load_model(path, device):
     if not path.exists():
         path.parent.mkdir(parents=True, exist_ok=True)
         urllib.request.urlretrieve(URL, path)
-    state = torch.load(path, map_location="cpu", weights_only=False)["state_dict"]
+    state = torch.load(path, map_location="cpu", weights_only=True)["state_dict"]
     model = ResNet20()
     model.load_state_dict({k.removeprefix("module."): v for k, v in state.items()})
 

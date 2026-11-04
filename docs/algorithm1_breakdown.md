@@ -28,10 +28,15 @@ The examples below use layer 01: 512 images x 16 x 32 x 32 = 8,388,608 values.
 - **`x` is one flat array** of `n` floats. Calibration treats every value the same,
   so the file's images x channels x height x width shape doesn't matter, and every
   kernel indexes `x` with a single `i`. No pitched or 3D allocations are needed.
-- **Host memory is not pinned.** `read_tensor` uses a `std::vector` and
-  `cudaMemcpy`. Pinning (`cudaMallocHost` or `cudaHostRegister`) would make the
-  upload faster and allow copy/compute overlap with streams. The copy is reported
-  separately from compute time, so this stays a future improvement.
+- **Host memory is pinned by default.** `calib.cu` pins the `std::vector` in place
+  with `cudaHostRegister`, so the GPU copies straight from it instead of through a
+  driver staging buffer. Pinning costs time once, so the program prints the pin and
+  copy times; `./calib FILE --pageable` runs without it for comparison. The upload
+  is reported separately from compute time.
+- **No streams.** Each kernel needs the previous one's output, and the program
+  handles one layer per run, so there is nothing to overlap. Streams would pay off
+  only if one run processed all 19 layers, copying layer L + 1 while computing
+  layer L.
 - **Memory kinds, slowest to fastest:**
   - Global: large and visible to every thread.
   - Shared: small and private to one block.

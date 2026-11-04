@@ -1,7 +1,7 @@
 # Parallel post-training quantization
 
 ```sh
-pip install torch torchvision
+pip install -r requirements.txt              # server: ~/miniforge3/envs/ptq
 python3 prepare.py                           # once: writes ~/ptq
 ./cmake-build-release/calib ~/ptq/layer01_act.bin
 ```
